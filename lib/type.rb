@@ -1,7 +1,7 @@
 module Type
   Boolean = Class.new do
     def inspect
-      "Bool"
+      'Bool'
     end
   end.new
 
@@ -11,4 +11,3 @@ module Type
     end
   end
 end
-

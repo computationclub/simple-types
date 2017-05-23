@@ -1,13 +1,13 @@
 module Term
   True = Class.new do
     def inspect
-      "true"
+      'true'
     end
   end.new
 
   False = Class.new do
     def inspect
-      "false"
+      'false'
     end
   end.new
 
@@ -35,4 +35,3 @@ module Term
     end
   end
 end
-
