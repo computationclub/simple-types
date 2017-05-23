@@ -10,7 +10,7 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(var('x'), empty_context) }.to raise_error(TypeError)
+    expect { type_of(var('x'), empty_context) }.to raise_error(TypeError, /unknown variable/)
   end
 
   specify do
@@ -26,7 +26,7 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(abs('x', bool, var('y'))) }.to raise_error(TypeError)
+    expect { type_of(abs('x', bool, var('y'))) }.to raise_error(TypeError, /unknown variable/)
   end
 
   specify do
@@ -38,7 +38,7 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(iff(abs('x', bool, tru), tru, fls)) }.to raise_error(TypeError)
+    expect { type_of(iff(abs('x', bool, tru), tru, fls)) }.to raise_error(TypeError, /non-boolean condition/)
   end
 
   specify do
@@ -50,7 +50,7 @@ RSpec.describe 'type_of' do
   specify do
     f = abs('x', bool, tru)
 
-    expect { type_of(iff(tru, f, tru)) }.to raise_error(TypeError)
+    expect { type_of(iff(tru, f, tru)) }.to raise_error(TypeError, /mismatching arms/)
   end
 
   specify do
@@ -58,7 +58,7 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(app(tru, tru)) }.to raise_error(TypeError)
+    expect { type_of(app(tru, tru)) }.to raise_error(TypeError, /non-abstraction/)
   end
 
   specify do
@@ -66,7 +66,7 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(app(abs('x', bool, tru), abs('x', bool, tru))) }.to raise_error(TypeError)
+    expect { type_of(app(abs('x', bool, tru), abs('x', bool, tru))) }.to raise_error(TypeError, /💩 argument/)
   end
 
   def tru
