@@ -1,4 +1,4 @@
-require 'simply_typed'
+require 'simple_types'
 
 RSpec.describe 'type_of' do
   specify do
