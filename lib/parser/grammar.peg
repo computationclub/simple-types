@@ -9,6 +9,7 @@ app_operand     <-  paren_expr
                  /  abstraction
                  /  variable
                  /  boolean_expr
+                 /  numeric_expr
 
 paren_expr      <-  "(" _* term_expr _* ")"                 %paren_term
 
@@ -28,6 +29,16 @@ false_expr      <-  "false"                                 %term_false
 if_expr         <-  "if" _+ term_expr _+ "then" _+
                     term_expr _+ "else" _+ term_expr        %term_if
 
+numeric_expr    <-  zero
+                 /  succ_expr
+                 /  pred_expr
+                 /  iszero_expr
+
+zero            <-  "0"                                     %term_zero
+succ_expr       <-  "succ" _+ term_expr                     %term_succ
+pred_expr       <-  "pred" _+ term_expr                     %term_pred
+iszero_expr     <-  "iszero" _+ term_expr                   %term_iszero
+
 _               <-  [ \n\r\t]
 
 type_expr       <-  function_type
@@ -35,9 +46,12 @@ type_expr       <-  function_type
 
 func_operand    <-  paren_type
                  /  boolean_type
+                 /  numeric_type
 
 paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
 
 function_type   <-  func_operand _* "→" _* type_expr        %type_func
 
 boolean_type    <-  "Bool"                                  %type_bool
+
+numeric_type    <-  "Nat"                                   %type_nat

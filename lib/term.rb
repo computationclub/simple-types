@@ -59,4 +59,36 @@ module Term
       "if #{condition.atomic} then #{consequent.atomic} else #{alternate.atomic}"
     end
   end
+
+  Zero = Class.new do
+    include Atom
+
+    def inspect
+      '0'
+    end
+  end.new
+
+  Succ = Struct.new(:arg) do
+    include Compound
+
+    def inspect
+      "succ #{arg.atomic}"
+    end
+  end
+
+  Pred = Struct.new(:arg) do
+    include Compound
+
+    def inspect
+      "pred #{arg.atomic}"
+    end
+  end
+
+  Iszero = Struct.new(:arg) do
+    include Compound
+
+    def inspect
+      "iszero #{arg.atomic}"
+    end
+  end
 end

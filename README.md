@@ -30,6 +30,13 @@ Booleans:
 - `Term::False`
 - `Term::If(condition: term, consequent: term, alternate: term)`
 
+Numeric:
+
+- `Term::Zero`
+- `Term::Succ(arg: term)`
+- `Term::Pred(arg: term)`
+- `Term::Iszero(arg: term)`
+
 ### Types
 
 Lambda calculus:
@@ -39,3 +46,7 @@ Lambda calculus:
 Booleans:
 
 - `Type::Boolean`
+
+Numeric:
+
+- `Type::Natural`

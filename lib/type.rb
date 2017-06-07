@@ -15,4 +15,12 @@ module Type
       'Bool'
     end
   end.new
+
+  Natural = Class.new do
+    include Term::Atom
+
+    def inspect
+      'Nat'
+    end
+  end
 end

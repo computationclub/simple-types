@@ -37,12 +37,32 @@ module Parser
       Term::If.new(el[2], el[6], el[10])
     end
 
+    def term_zero(*)
+      Term::Zero
+    end
+
+    def term_succ(t, a, b, el)
+      Term::Succ.new(el[2])
+    end
+
+    def term_pred(t, a, b, el)
+      Term::Pred.new(el[2])
+    end
+
+    def term_iszero(t, a, b, el)
+      Term::Iszero.new(el[2])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end
 
     def type_bool(*)
       Type::Boolean
+    end
+
+    def type_nat(*)
+      Type::Natural
     end
 
   end

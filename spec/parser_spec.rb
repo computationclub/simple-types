@@ -96,6 +96,22 @@ RSpec.describe Parser do
           Term::Var.new('z'))
       )
     end
+
+    it 'parses zero' do
+      expect(Parser.parse '0').to eq(Term::Zero)
+    end
+
+    it 'parses succ' do
+      expect(Parser.parse 'succ 0').to eq(Term::Succ.new(Term::Zero))
+    end
+
+    it 'parses pred' do
+      expect(Parser.parse 'pred 0').to eq(Term::Pred.new(Term::Zero))
+    end
+
+    it 'parses iszero' do
+      expect(Parser.parse 'iszero 0').to eq(Term::Iszero.new(Term::Zero))
+    end
   end
 
   describe 'types' do
@@ -130,6 +146,12 @@ RSpec.describe Parser do
         Type::Function.new(
           Type::Function.new(Type::Boolean, Type::Boolean),
           Type::Boolean)
+      )
+    end
+
+    it 'parses a function from booleans to numbers' do
+      expect(Parser.parse('Bool → Nat')).to eq(
+        Type::Function.new(Type::Boolean, Type::Natural)
       )
     end
   end
