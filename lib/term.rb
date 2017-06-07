@@ -1,16 +1,4 @@
 module Term
-  True = Class.new do
-    def inspect
-      'true'
-    end
-  end.new
-
-  False = Class.new do
-    def inspect
-      'false'
-    end
-  end.new
-
   Var = Struct.new(:name) do
     def inspect
       name
@@ -23,15 +11,27 @@ module Term
     end
   end
 
-  If = Struct.new(:condition, :consequent, :alternate) do
-    def inspect
-      "if #{condition.inspect} then #{consequent.inspect} else #{alternate.inspect}"
-    end
-  end
-
   Application = Struct.new(:left, :right) do
     def inspect
       "(#{left.inspect} #{right.inspect})"
+    end
+  end
+
+  True = Class.new do
+    def inspect
+      'true'
+    end
+  end.new
+
+  False = Class.new do
+    def inspect
+      'false'
+    end
+  end.new
+
+  If = Struct.new(:condition, :consequent, :alternate) do
+    def inspect
+      "if #{condition.inspect} then #{consequent.inspect} else #{alternate.inspect}"
     end
   end
 end
