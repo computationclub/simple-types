@@ -1,0 +1,43 @@
+grammar Parser.Grammar
+
+expression      <-  _* (term_expr / type_expr) _*           %term_expression
+
+term_expr       <-  application
+                 /  app_operand
+
+app_operand     <-  paren_expr
+                 /  abstraction
+                 /  variable
+                 /  boolean_expr
+
+paren_expr      <-  "(" _* term_expr _* ")"                 %paren_term
+
+application     <-  app_operand (_+ app_operand)+           %term_app
+
+abstraction     <-  "λ" _* variable _* ":" _* type_expr
+                    _* "." _* term_expr                     %term_abs
+
+variable        <-  [a-z] ![a-z]                            %term_var
+
+boolean_expr    <-  true_expr
+                 /  false_expr
+                 /  if_expr
+
+true_expr       <-  "true"                                  %term_true
+false_expr      <-  "false"                                 %term_false
+if_expr         <-  "if" _+ term_expr _+ "then" _+
+                    term_expr _+ "else" _+ term_expr        %term_if
+
+_               <-  [ \n\r\t]
+
+type_expr       <-  function_type
+                 /  func_operand
+
+func_operand    <-  paren_type
+                 /  boolean_type
+
+paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
+
+function_type   <-  func_operand _* "→" _* type_expr        %type_func
+
+boolean_type    <-  "Bool"                                  %type_bool

@@ -1,1 +1,3 @@
+lib/parser/grammar.rb
+node_modules
 /spec/examples.txt
