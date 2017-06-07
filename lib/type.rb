@@ -31,4 +31,12 @@ module Type
       name
     end
   end
+
+  Unit = Class.new do
+    include Term::Atom
+
+    def inspect
+      'Unit'
+    end
+  end.new
 end

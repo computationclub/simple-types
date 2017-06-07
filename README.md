@@ -37,6 +37,10 @@ Numeric:
 - `Term::Pred(arg: term)`
 - `Term::Iszero(arg: term)`
 
+Unit type:
+
+- `Term::Unit`
+
 ### Types
 
 Lambda calculus:
@@ -54,3 +58,7 @@ Numeric:
 Base types:
 
 - `Type::Base(name: string)`
+
+Unit type:
+
+- `Type::Unit`

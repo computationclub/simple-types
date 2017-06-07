@@ -112,6 +112,10 @@ RSpec.describe Parser do
     it 'parses iszero' do
       expect(Parser.parse 'iszero 0').to eq(Term::Iszero.new(Term::Zero))
     end
+
+    it 'parses unit' do
+      expect(Parser.parse 'unit').to eq(Term::Unit)
+    end
   end
 
   describe 'types' do
@@ -157,6 +161,10 @@ RSpec.describe Parser do
 
     it 'parsers a base type' do
       expect(Parser.parse 'Float').to eq(Type::Base.new('Float'))
+    end
+
+    it 'parses Unit' do
+      expect(Parser.parse 'Unit').to eq(Type::Unit)
     end
   end
 end

@@ -91,4 +91,12 @@ module Term
       "iszero #{arg.atomic}"
     end
   end
+
+  Unit = Class.new do
+    include Atom
+
+    def inspect
+      'unit'
+    end
+  end.new
 end

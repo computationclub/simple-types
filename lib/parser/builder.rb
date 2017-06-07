@@ -53,6 +53,10 @@ module Parser
       Term::Iszero.new(el[2])
     end
 
+    def term_unit(*)
+      Term::Unit
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end
@@ -63,6 +67,10 @@ module Parser
 
     def type_nat(*)
       Type::Natural
+    end
+
+    def type_unit(*)
+      Type::Unit
     end
 
     def type_base(t, a, b, el)
