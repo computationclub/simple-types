@@ -1,104 +1,73 @@
 require 'simple_types'
+require 'parser'
 
 RSpec.describe 'type_of' do
   specify do
-    expect(type_of(tru)).to eq(bool)
+    expect(type_of(expr 'true')).to eq(expr 'Bool')
   end
 
   specify do
-    expect(type_of(fls)).to eq(bool)
+    expect(type_of(expr 'false')).to eq(expr 'Bool')
   end
 
   specify do
-    expect { type_of(var('x'), empty_context) }.to raise_error(TypeError, /unknown variable/)
+    expect { type_of(expr('x'), empty_context) }.to raise_error(TypeError, /unknown variable/)
   end
 
   specify do
-    expect(type_of(var('x'), 'x' => bool)).to eq(bool)
+    expect(type_of(expr('x'), 'x' => expr('Bool'))).to eq(expr 'Bool')
   end
 
   specify do
-    expect(type_of(abs('x', bool, tru))).to eq(func(bool, bool))
+    expect(type_of(expr 'λx:Bool. true')).to eq(expr 'Bool → Bool')
   end
 
   specify do
-    expect(type_of(abs('x', bool, var('x')))).to eq(func(bool, bool))
+    expect(type_of(expr 'λx:Bool. x')).to eq(expr 'Bool → Bool')
   end
 
   specify do
-    expect { type_of(abs('x', bool, var('y'))) }.to raise_error(TypeError, /unknown variable/)
+    expect { type_of(expr 'λx:Bool. y') }.to raise_error(TypeError, /unknown variable/)
   end
 
   specify do
-    expect(type_of(abs('x', bool, abs('y', bool, var('x'))))).to eq(func(bool, func(bool, bool)))
+    expect(type_of(expr 'λx:Bool. λy:Bool. x')).to eq(expr 'Bool → Bool → Bool')
   end
 
   specify do
-    expect(type_of(iff(tru, tru, fls))).to eq(bool)
+    expect(type_of(expr 'if true then true else false')).to eq(expr 'Bool')
   end
 
   specify do
-    expect { type_of(iff(abs('x', bool, tru), tru, fls)) }.to raise_error(TypeError, /non-boolean condition/)
+    expect { type_of(expr 'if (λx:Bool. true) then true else false') }.to raise_error(TypeError, /non-boolean condition/)
   end
 
   specify do
-    f = abs('x', bool, tru)
-
-    expect(type_of(iff(tru, f, f))).to eq(func(bool, bool))
+    expect(type_of(expr 'if true then (λx:Bool. true) else (λx:Bool. true)')).to eq(expr 'Bool → Bool')
   end
 
   specify do
-    f = abs('x', bool, tru)
-
-    expect { type_of(iff(tru, f, tru)) }.to raise_error(TypeError, /mismatching arms/)
+    expect { type_of(expr 'if true then (λx:Bool. true) else true') }.to raise_error(TypeError, /mismatching arms/)
   end
 
   specify do
-    expect(type_of(iff(tru, var('x'), tru), 'x' => bool)).to eq(bool)
+    expect(type_of(expr('if true then x else true'), 'x' => expr('Bool'))).to eq(expr 'Bool')
   end
 
   specify do
-    expect { type_of(app(tru, tru)) }.to raise_error(TypeError, /non-abstraction/)
+    expect { type_of(expr 'true true') }.to raise_error(TypeError, /non-abstraction/)
   end
 
   specify do
-    expect(type_of(app(abs('x', bool, tru), tru))).to eq(bool)
+    expect(type_of(expr '(λx:Bool. true) true')).to eq(expr 'Bool')
   end
 
   specify do
-    expect { type_of(app(abs('x', bool, tru), abs('x', bool, tru))) }.to raise_error(TypeError, /💩 argument/)
+    expect { type_of(expr '(λx:Bool. true) (λx:Bool. true)') }.to raise_error(TypeError, /💩 argument/)
   end
 
-  def tru
-    Term::True
-  end
-
-  def fls
-    Term::False
-  end
-
-  def bool
-    Type::Boolean
-  end
-
-  def func(from, to)
-    Type::Function.new(from, to)
-  end
-
-  def app(left, right)
-    Term::Application.new(left, right)
-  end
-
-  def iff(condition, consequent, alternate)
-    Term::If.new(condition, consequent, alternate)
-  end
-
-  def abs(param, type, body)
-    Term::Abs.new(param, type, body)
-  end
-
-  def var(name)
-    Term::Var.new(name)
+  def expr(text)
+    Parser.parse(text)
   end
 
   def empty_context
