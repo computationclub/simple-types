@@ -154,5 +154,9 @@ RSpec.describe Parser do
         Type::Function.new(Type::Boolean, Type::Natural)
       )
     end
+
+    it 'parsers a base type' do
+      expect(Parser.parse 'Float').to eq(Type::Base.new('Float'))
+    end
   end
 end

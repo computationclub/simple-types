@@ -65,5 +65,9 @@ module Parser
       Type::Natural
     end
 
+    def type_base(t, a, b, el)
+      Type::Base.new(t[a ... b])
+    end
+
   end
 end

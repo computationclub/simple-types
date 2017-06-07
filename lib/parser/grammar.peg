@@ -47,6 +47,7 @@ type_expr       <-  function_type
 func_operand    <-  paren_type
                  /  boolean_type
                  /  numeric_type
+                 /  base_type
 
 paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
 
@@ -55,3 +56,5 @@ function_type   <-  func_operand _* "→" _* type_expr        %type_func
 boolean_type    <-  "Bool"                                  %type_bool
 
 numeric_type    <-  "Nat"                                   %type_nat
+
+base_type       <-  [A-Z] [A-Za-z]*                         %type_base

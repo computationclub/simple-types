@@ -23,4 +23,12 @@ module Type
       'Nat'
     end
   end
+
+  Base = Struct.new(:name) do
+    include Term::Atom
+
+    def inspect
+      name
+    end
+  end
 end

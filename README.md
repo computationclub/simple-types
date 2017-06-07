@@ -50,3 +50,7 @@ Booleans:
 Numeric:
 
 - `Type::Natural`
+
+Base types:
+
+- `Type::Base(name: string)`
