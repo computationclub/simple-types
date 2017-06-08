@@ -143,8 +143,7 @@ RSpec.describe Parser do
       expect(Parser.parse 'if x then y else a ; b').to eq(
         Term::Sequence.new(
           Term::If.new(Term::Var.new('x'), Term::Var.new('y'), Term::Var.new('a')),
-          Term::Var.new('b')
-        )
+          Term::Var.new('b'))
       )
     end
 
@@ -158,8 +157,7 @@ RSpec.describe Parser do
       expect(Parser.parse 'x y as Bool').to eq(
         Term::Ascribe.new(
           Term::Application.new(Term::Var.new('x'), Term::Var.new('y')),
-          Type::Boolean
-        )
+          Type::Boolean)
       )
     end
 
@@ -167,8 +165,7 @@ RSpec.describe Parser do
       expect(Parser.parse 'x ; y as Bool').to eq(
         Term::Sequence.new(
           Term::Var.new('x'),
-          Term::Ascribe.new(Term::Var.new('y'), Type::Boolean)
-        )
+          Term::Ascribe.new(Term::Var.new('y'), Type::Boolean))
       )
     end
 
