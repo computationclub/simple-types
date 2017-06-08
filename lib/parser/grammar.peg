@@ -61,7 +61,7 @@ let_binding     <-  "let" _+ variable _* "=" _*
                     term_expr _+ "in" _+ term_expr          %term_let
 
 projection      <-  proj_base (_* "." _* proj_field)+       %term_project
-proj_field      <-  "1" / "2"
+proj_field      <-  [1-9] [0-9]*
 
 pair_expr       <-  "{" _* term_expr _* "," _*
                     term_expr _* "}"                        %term_pair
