@@ -79,6 +79,7 @@ pair_part       <-  paren_type
                  /  numeric_type
                  /  unit_type
                  /  base_type
+                 /  tuple_type
 
 paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
 
@@ -93,3 +94,6 @@ numeric_type    <-  "Nat"                                   %type_nat
 unit_type       <-  "Unit"                                  %type_unit
 
 base_type       <-  [A-Z] [A-Za-z]*                         %type_base
+
+tuple_type      <-  "{" _* type_expr _*
+                    ("," _* type_expr _*)+ "}"              %type_tuple

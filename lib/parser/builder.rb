@@ -102,5 +102,10 @@ module Parser
       Type::Pair.new(el[0], el[4])
     end
 
+    def type_tuple(t, a, b, el)
+      types = [el[2]] + el[4].map(&:type_expr)
+      Type::Tuple.new(types)
+    end
+
   end
 end

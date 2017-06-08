@@ -283,5 +283,15 @@ RSpec.describe Parser do
           Type::Pair.new(Type::Boolean, Type::Natural))
       )
     end
+
+    it 'parses a tuple type' do
+      expect(Parser.parse '{Nat, Nat → Unit, Bool × Unit}').to eq(
+        Type::Tuple.new([
+          Type::Natural,
+          Type::Function.new(Type::Natural, Type::Unit),
+          Type::Pair.new(Type::Boolean, Type::Unit)
+        ])
+      )
+    end
   end
 end

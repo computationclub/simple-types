@@ -83,3 +83,7 @@ Unit type:
 Pairs:
 
 - `Type::Pair(first: type, second: type)`
+
+Tuples:
+
+- `Type::Tuple(members: [type])`

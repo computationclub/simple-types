@@ -48,4 +48,12 @@ module Type
       "#{first.atomic} × #{snd}"
     end
   end
+
+  Tuple = Struct.new(:members) do
+    include Term::Atom
+
+    def inspect
+      "{#{members.map(&:inspect) * ', '}}"
+    end
+  end
 end
