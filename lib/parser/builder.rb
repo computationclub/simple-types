@@ -22,7 +22,7 @@ module Parser
 
     def term_app(t, a, b, el)
       args = el[1].map(&:app_operand)
-      ([el[0]] + args).inject { |s, t| Term::Application.new(s, t) }
+      args.inject(el[0]) { |s, t| Term::Application.new(s, t) }
     end
 
     def term_abs(t, a, b, el)
