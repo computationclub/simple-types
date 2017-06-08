@@ -12,6 +12,14 @@ module Parser
       el[2]
     end
 
+    def term_seq(t, a, b, el)
+      Term::Sequence.new(el[0], el[4])
+    end
+
+    def term_ascribe(t, a, b, el)
+      Term::Ascribe.new(el[0], el[4])
+    end
+
     def term_app(t, a, b, el)
       args = el[1].map(&:app_operand)
       ([el[0]] + args).inject { |s, t| Term::Application.new(s, t) }
@@ -55,10 +63,6 @@ module Parser
 
     def term_unit(*)
       Term::Unit
-    end
-
-    def term_seq(t, a, b, el)
-      Term::Sequence.new(el[0], el[4])
     end
 
     def type_func(t, a, b, el)

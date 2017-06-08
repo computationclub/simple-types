@@ -45,6 +45,10 @@ Sequencing:
 
 - `Term::Sequence(first: term, last: term)`
 
+Ascription:
+
+- `Term::Ascribe(term: term, type: type)`
+
 ### Types
 
 Lambda calculus:

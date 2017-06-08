@@ -107,4 +107,12 @@ module Term
       "#{first.inspect} ; #{last.inspect}"
     end
   end
+
+  Ascribe = Struct.new(:term, :type) do
+    include Compound
+
+    def inspect
+      "#{term.atomic} as #{type.inspect}"
+    end
+  end
 end

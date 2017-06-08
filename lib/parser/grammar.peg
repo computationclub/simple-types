@@ -5,7 +5,10 @@ expression      <-  _* (term_expr / type_expr) _*           %term_expression
 term_expr       <-  sequence
                  /  sequence_part
 
-sequence_part   <-  application
+sequence_part   <-  ascribed_term
+                 /  ascribable
+                 
+ascribable      <-  application
                  /  app_operand
 
 app_operand     <-  paren_expr
@@ -18,6 +21,8 @@ app_operand     <-  paren_expr
 paren_expr      <-  "(" _* term_expr _* ")"                 %paren_term
 
 sequence        <-  sequence_part _* ";" _* term_expr       %term_seq
+
+ascribed_term   <-  ascribable _+ "as" _+ type_expr         %term_ascribe
 
 application     <-  app_operand (_+ app_operand)+           %term_app
 

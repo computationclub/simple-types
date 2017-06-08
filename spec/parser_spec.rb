@@ -123,11 +123,35 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses sequencing as lower precedence than application' do
+    it 'parses sequencing with lower precedence than application' do
       expect(Parser.parse 'x ; y z').to eq(
         Term::Sequence.new(
           Term::Var.new('x'),
           Term::Application.new(Term::Var.new('y'), Term::Var.new('z')))
+      )
+    end
+
+    it 'parses ascription' do
+      expect(Parser.parse 'x as Bool').to eq(
+        Term::Ascribe.new(Term::Var.new('x'), Type::Boolean)
+      )
+    end
+
+    it 'parses ascription with lower precedence than application' do
+      expect(Parser.parse 'x y as Bool').to eq(
+        Term::Ascribe.new(
+          Term::Application.new(Term::Var.new('x'), Term::Var.new('y')),
+          Type::Boolean
+        )
+      )
+    end
+
+    it 'parses ascription with higher precedence than sequencing' do
+      expect(Parser.parse 'x ; y as Bool').to eq(
+        Term::Sequence.new(
+          Term::Var.new('x'),
+          Term::Ascribe.new(Term::Var.new('y'), Type::Boolean)
+        )
       )
     end
   end
