@@ -1,11 +1,11 @@
 grammar Parser.Grammar
 
-expression      <-  _* (term_expr / type_expr) _*           %term_expression
+expression      <-  _* (statement / type_expr) _*           %term_expression
 
-term_expr       <-  sequence
-                 /  sequence_part
+statement       <-  sequence
+                 /  term_expr
 
-sequence_part   <-  ascribed_term
+term_expr       <-  ascribed_term
                  /  ascribable
                  
 ascribable      <-  application
@@ -18,9 +18,9 @@ app_operand     <-  paren_expr
                  /  numeric_expr
                  /  unit_expr
 
-paren_expr      <-  "(" _* term_expr _* ")"                 %paren_term
+paren_expr      <-  "(" _* statement _* ")"                 %paren_term
 
-sequence        <-  sequence_part _* ";" _* term_expr       %term_seq
+sequence        <-  term_expr _* ";" _* statement           %term_seq
 
 ascribed_term   <-  ascribable _+ "as" _+ type_expr         %term_ascribe
 

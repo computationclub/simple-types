@@ -131,6 +131,15 @@ RSpec.describe Parser do
       )
     end
 
+    it 'parses sequencing as lower precedence than if-expressions' do
+      expect(Parser.parse 'if x then y else a ; b').to eq(
+        Term::Sequence.new(
+          Term::If.new(Term::Var.new('x'), Term::Var.new('y'), Term::Var.new('a')),
+          Term::Var.new('b')
+        )
+      )
+    end
+
     it 'parses ascription' do
       expect(Parser.parse 'x as Bool').to eq(
         Term::Ascribe.new(Term::Var.new('x'), Type::Boolean)
