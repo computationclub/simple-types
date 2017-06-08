@@ -53,6 +53,11 @@ Let binding:
 
 - `Term::Let(param: string, arg: term, body: term)`
 
+Pairs:
+
+- `Term::Project(term: term, field: int)`
+- `Term::Pair(first: term, second: term)`
+
 ### Types
 
 Lambda calculus:
@@ -74,3 +79,7 @@ Base types:
 Unit type:
 
 - `Type::Unit`
+
+Pairs:
+
+- `Type::Pair(first: type, second: type)`

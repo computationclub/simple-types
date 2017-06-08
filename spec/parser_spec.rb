@@ -169,11 +169,54 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parse a let-binding' do
+    it 'parses a let-binding' do
       expect(Parser.parse 'let x = y z in x').to eq(
         Term::Let.new('x',
                       Term::Application.new(Term::Var.new('y'), Term::Var.new('z')),
                       Term::Var.new('x'))
+      )
+    end
+
+    it 'parses a pair' do
+      expect(Parser.parse '{x y, z}').to eq(
+        Term::Pair.new(
+          Term::Application.new(Term::Var.new('x'), Term::Var.new('y')),
+          Term::Var.new('z'))
+      )
+    end
+
+    it 'parses a pair projection' do
+      expect(Parser.parse 'x.1').to eq(
+        Term::Project.new(Term::Var.new('x'), 1)
+      )
+    end
+
+    it 'parses a chain of pair projections' do
+      expect(Parser.parse '{{x,y},z}.1.2').to eq(
+        Term::Project.new(
+          Term::Project.new(
+            Term::Pair.new(
+              Term::Pair.new(Term::Var.new('x'), Term::Var.new('y')),
+              Term::Var.new('z')),
+            1),
+          2)
+      )
+    end
+
+    it 'parses projection with higher precedence than application' do
+      expect(Parser.parse 'x y.1').to eq(
+        Term::Application.new(
+          Term::Var.new('x'),
+          Term::Project.new(Term::Var.new('y'), 1))
+      )
+    end
+
+    it 'parses projection within an if-expression' do
+      expect(Parser.parse 'if x then y else z.2').to eq(
+        Term::If.new(
+          Term::Var.new('x'),
+          Term::Var.new('y'),
+          Term::Project.new(Term::Var.new('z'), 2))
       )
     end
   end
@@ -219,12 +262,26 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parsers a base type' do
+    it 'parses a base type' do
       expect(Parser.parse 'Float').to eq(Type::Base.new('Float'))
     end
 
     it 'parses Unit' do
       expect(Parser.parse 'Unit').to eq(Type::Unit)
+    end
+
+    it 'parses the pair type' do
+      expect(Parser.parse 'Nat × Bool').to eq(
+        Type::Pair.new(Type::Natural, Type::Boolean)
+      )
+    end
+
+    it 'parses the pair type with higher precedence than the function type' do
+      expect(Parser.parse 'Nat → Bool × Nat').to eq(
+        Type::Function.new(
+          Type::Natural,
+          Type::Pair.new(Type::Boolean, Type::Natural))
+      )
     end
   end
 end

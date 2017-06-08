@@ -69,6 +69,15 @@ module Parser
       Term::Let.new(el[2].name, el[6], el[10])
     end
 
+    def term_project(t, a, b, el)
+      fields = el[1].map { |t| t.proj_field.text.to_i }
+      fields.inject(el[0]) { |t, f| Term::Project.new(t, f) }
+    end
+
+    def term_pair(t, a, b, el)
+      Term::Pair.new(el[2], el[6])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end
@@ -87,6 +96,10 @@ module Parser
 
     def type_base(t, a, b, el)
       Type::Base.new(t[a ... b])
+    end
+
+    def type_pair(t, a, b, el)
+      Type::Pair.new(el[0], el[4])
     end
 
   end

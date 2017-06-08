@@ -39,4 +39,13 @@ module Type
       'Unit'
     end
   end.new
+
+  Pair = Struct.new(:first, :second) do
+    include Term::Compound
+
+    def inspect
+      snd = second.is_a?(Pair) ? second.inspect : second.atomic
+      "#{first.atomic} × #{snd}"
+    end
+  end
 end

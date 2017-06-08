@@ -123,4 +123,21 @@ module Term
       "let #{param} = #{arg.atomic} in #{body.atomic}"
     end
   end
+
+  Project = Struct.new(:term, :field) do
+    include Compound
+
+    def inspect
+      base = term.is_a?(Project) ? term.inspect : term.atomic
+      "#{base}.#{field}"
+    end
+  end
+
+  Pair = Struct.new(:first, :second) do
+    include Atom
+
+    def inspect
+      "{#{first.atomic}, #{second.atomic}}"
+    end
+  end
 end

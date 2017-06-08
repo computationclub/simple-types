@@ -11,13 +11,17 @@ term_expr       <-  ascribed_term
 ascribable      <-  application
                  /  app_operand
 
-app_operand     <-  paren_expr
+app_operand     <-  projection
+                 /  proj_base
+
+proj_base       <-  paren_expr
                  /  abstraction
                  /  variable
                  /  boolean_expr
                  /  numeric_expr
                  /  unit_expr
                  /  let_binding
+                 /  pair_expr
 
 paren_expr      <-  "(" _* statement _* ")"                 %paren_term
 
@@ -56,12 +60,21 @@ unit_expr       <-  "unit"                                  %term_unit
 let_binding     <-  "let" _+ variable _* "=" _*
                     term_expr _+ "in" _+ term_expr          %term_let
 
+projection      <-  proj_base (_* "." _* proj_field)+       %term_project
+proj_field      <-  "1" / "2"
+
+pair_expr       <-  "{" _* term_expr _* "," _*
+                    term_expr _* "}"                        %term_pair
+
 _               <-  [ \n\r\t]
 
 type_expr       <-  function_type
                  /  func_operand
 
-func_operand    <-  paren_type
+func_operand    <-  pair_type
+                 /  pair_part
+
+pair_part       <-  paren_type
                  /  boolean_type
                  /  numeric_type
                  /  unit_type
@@ -70,6 +83,8 @@ func_operand    <-  paren_type
 paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
 
 function_type   <-  func_operand _* "→" _* type_expr        %type_func
+
+pair_type       <-  pair_part _* "×" _* func_operand        %type_pair
 
 boolean_type    <-  "Bool"                                  %type_bool
 
