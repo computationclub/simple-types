@@ -99,4 +99,12 @@ module Term
       'unit'
     end
   end.new
+
+  Sequence = Struct.new(:first, :last) do
+    include Compound
+
+    def inspect
+      "#{first.inspect} ; #{last.inspect}"
+    end
+  end
 end

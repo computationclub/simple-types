@@ -116,6 +116,20 @@ RSpec.describe Parser do
     it 'parses unit' do
       expect(Parser.parse 'unit').to eq(Term::Unit)
     end
+
+    it 'parses a sequence' do
+      expect(Parser.parse 'x ; y').to eq(
+        Term::Sequence.new(Term::Var.new('x'), Term::Var.new('y'))
+      )
+    end
+
+    it 'parses sequencing as lower precedence than application' do
+      expect(Parser.parse 'x ; y z').to eq(
+        Term::Sequence.new(
+          Term::Var.new('x'),
+          Term::Application.new(Term::Var.new('y'), Term::Var.new('z')))
+      )
+    end
   end
 
   describe 'types' do

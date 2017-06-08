@@ -57,6 +57,10 @@ module Parser
       Term::Unit
     end
 
+    def term_seq(t, a, b, el)
+      Term::Sequence.new(el[0], el[4])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end

@@ -41,6 +41,10 @@ Unit type:
 
 - `Term::Unit`
 
+Sequencing:
+
+- `Term::Sequence(first: term, last: term)`
+
 ### Types
 
 Lambda calculus:
