@@ -22,7 +22,7 @@ module Parser
 
     def term_app(t, a, b, el)
       args = el[1].map(&:app_operand)
-      args.inject(el[0]) { |s, t| Term::Application.new(s, t) }
+      args.inject(el[0]) { |x, y| Term::Application.new(x, y) }
     end
 
     def term_abs(t, a, b, el)
@@ -70,8 +70,8 @@ module Parser
     end
 
     def term_project(t, a, b, el)
-      fields = el[1].map { |t| t.proj_field.text.to_i }
-      fields.inject(el[0]) { |t, f| Term::Project.new(t, f) }
+      fields = el[1].map { |term| term.proj_field.text.to_i }
+      fields.inject(el[0]) { |term, field| Term::Project.new(term, field) }
     end
 
     def term_pair(t, a, b, el)
