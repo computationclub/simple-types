@@ -163,6 +163,14 @@ RSpec.describe Parser do
         )
       )
     end
+
+    it 'parse a let-binding' do
+      expect(Parser.parse 'let x = y z in x').to eq(
+        Term::Let.new('x',
+                      Term::Application.new(Term::Var.new('y'), Term::Var.new('z')),
+                      Term::Var.new('x'))
+      )
+    end
   end
 
   describe 'types' do

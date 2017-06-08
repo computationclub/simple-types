@@ -65,6 +65,10 @@ module Parser
       Term::Unit
     end
 
+    def term_let(t, a, b, el)
+      Term::Let.new(el[2].name, el[6], el[10])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end

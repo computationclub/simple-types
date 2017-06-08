@@ -17,6 +17,7 @@ app_operand     <-  paren_expr
                  /  boolean_expr
                  /  numeric_expr
                  /  unit_expr
+                 /  let_binding
 
 paren_expr      <-  "(" _* statement _* ")"                 %paren_term
 
@@ -51,6 +52,9 @@ pred_expr       <-  "pred" _+ term_expr                     %term_pred
 iszero_expr     <-  "iszero" _+ term_expr                   %term_iszero
 
 unit_expr       <-  "unit"                                  %term_unit
+
+let_binding     <-  "let" _+ variable _* "=" _*
+                    term_expr _+ "in" _+ term_expr          %term_let
 
 _               <-  [ \n\r\t]
 

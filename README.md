@@ -49,6 +49,10 @@ Ascription:
 
 - `Term::Ascribe(term: term, type: type)`
 
+Let binding:
+
+- `Term::Let(param: string, arg: term, body: term)`
+
 ### Types
 
 Lambda calculus:

@@ -115,4 +115,12 @@ module Term
       "#{term.atomic} as #{type.inspect}"
     end
   end
+
+  Let = Struct.new(:param, :arg, :body) do
+    include Compound
+
+    def inspect
+      "let #{param} = #{arg.atomic} in #{body.atomic}"
+    end
+  end
 end
