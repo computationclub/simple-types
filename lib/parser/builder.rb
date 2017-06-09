@@ -133,7 +133,7 @@ module Parser
     end
 
     def type_pair(t, a, b, el)
-      Type::Pair.new(el[0], el[4])
+      Type::Product.new(el[0], el[4])
     end
 
     def type_tuple(t, a, b, el)

@@ -83,10 +83,10 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ### Pairs
 
-| Syntax     | Node                                    |
-| ---------- | --------------------------------------- |
-| `{t \| t}` | `Term::Pair(first: term, second: term)` |
-| `T × T`    | `Type::Pair(first: type, second: type)` |
+| Syntax     | Node                                       |
+| ---------- | ------------------------------------------ |
+| `{t \| t}` | `Term::Pair(first: term, second: term)`    |
+| `T × T`    | `Type::Product(first: type, second: type)` |
 
 ### Tuples
 

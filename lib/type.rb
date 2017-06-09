@@ -40,11 +40,11 @@ module Type
     end
   end.new
 
-  Pair = Struct.new(:first, :second) do
+  Product = Struct.new(:first, :second) do
     include Term::Compound
 
     def inspect
-      snd = second.is_a?(Pair) ? second.inspect : second.atomic
+      snd = second.is_a?(Product) ? second.inspect : second.atomic
       "#{first.atomic} × #{snd}"
     end
   end

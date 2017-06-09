@@ -337,7 +337,7 @@ RSpec.describe Parser do
 
     it 'parses the pair type' do
       expect(Parser.parse 'Nat × Bool').to eq(
-        Type::Pair.new(Type::Natural, Type::Boolean)
+        Type::Product.new(Type::Natural, Type::Boolean)
       )
     end
 
@@ -345,7 +345,7 @@ RSpec.describe Parser do
       expect(Parser.parse 'Nat → Bool × Nat').to eq(
         Type::Function.new(
           Type::Natural,
-          Type::Pair.new(Type::Boolean, Type::Natural))
+          Type::Product.new(Type::Boolean, Type::Natural))
       )
     end
 
@@ -354,7 +354,7 @@ RSpec.describe Parser do
         Type::Tuple.new([
           Type::Natural,
           Type::Function.new(Type::Natural, Type::Unit),
-          Type::Pair.new(Type::Boolean, Type::Unit)
+          Type::Product.new(Type::Boolean, Type::Unit)
         ])
       )
     end
@@ -384,7 +384,7 @@ RSpec.describe Parser do
     it 'parses the sum type with lower precedence than the pair type' do
       expect(Parser.parse 'Nat × Bool + Nat').to eq(
         Type::Sum.new(
-          Type::Pair.new(Type::Natural, Type::Boolean),
+          Type::Product.new(Type::Natural, Type::Boolean),
           Type::Natural)
       )
     end
