@@ -58,9 +58,9 @@ numeric_expr      <-  zero
                    /  iszero_expr
 
 zero              <-  "0"                                         %term_zero
-succ_expr         <-  "succ" _+ term_expr                         %term_succ
-pred_expr         <-  "pred" _+ term_expr                         %term_pred
-iszero_expr       <-  "iszero" _+ term_expr                       %term_iszero
+succ_expr         <-  "succ" _+ app_operand                       %term_succ
+pred_expr         <-  "pred" _+ app_operand                       %term_pred
+iszero_expr       <-  "iszero" _+ app_operand                     %term_iszero
 
 unit_expr         <-  "unit"                                      %term_unit
 
