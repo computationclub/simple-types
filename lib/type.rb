@@ -40,12 +40,12 @@ module Type
     end
   end.new
 
-  Product = Struct.new(:first, :second) do
+  Product = Struct.new(:left, :right) do
     include Term::Compound
 
     def inspect
-      snd = second.is_a?(Product) ? second.inspect : second.atomic
-      "#{first.atomic} × #{snd}"
+      r = right.is_a?(Product) ? right.inspect : right.atomic
+      "#{left.atomic} × #{r}"
     end
   end
 
@@ -66,12 +66,12 @@ module Type
     end
   end
 
-  Sum = Struct.new(:first, :second) do
+  Sum = Struct.new(:left, :right) do
     include Term::Compound
 
     def inspect
-      snd = second.is_a?(Sum) ? second.inspect : second.atomic
-      "#{first.atomic} + #{snd}"
+      r = right.is_a?(Sum) ? right.inspect : right.atomic
+      "#{left.atomic} + #{r}"
     end
   end
 end

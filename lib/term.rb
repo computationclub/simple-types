@@ -133,11 +133,11 @@ module Term
     end
   end
 
-  Pair = Struct.new(:first, :second) do
+  Pair = Struct.new(:left, :right) do
     include Atom
 
     def inspect
-      "{#{first.atomic} | #{second.atomic}}"
+      "{#{left.atomic} | #{right.atomic}}"
     end
   end
 

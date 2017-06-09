@@ -83,10 +83,10 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ### Pairs
 
-| Syntax     | Node                                       |
-| ---------- | ------------------------------------------ |
-| `{t \| t}` | `Term::Pair(first: term, second: term)`    |
-| `T × T`    | `Type::Product(first: type, second: type)` |
+| Syntax     | Node                                     |
+| ---------- | ---------------------------------------- |
+| `{t \| t}` | `Term::Pair(left: term, right: term)`    |
+| `T × T`    | `Type::Product(left: type, right: type)` |
 
 ### Tuples
 
@@ -113,4 +113,4 @@ In these terms, `clause` means `Term::SumClause(param: string, body: term)`
 | `inl t as T`                       | `Term::Inl(term: term, type: type)`                      |
 | `inr t as T`                       | `Term::Inr(term: term, type: type)`                      |
 | `case t of inl x ⇒ t \| inr x ⇒ t` | `Term::SumCase(term: term, left: clause, right: clause)` |
-| `T + T`                            | `Type::Sum(first: type, second: type)`                   |
+| `T + T`                            | `Type::Sum(left: type, right: type)`                     |
