@@ -280,8 +280,24 @@ RSpec.describe Parser do
       expect(Parser.parse 'case x of inl a ⇒ true | inr b ⇒ false').to eq(
         Term::SumCase.new(
           Term::Var.new('x'),
-          Term::SumClause.new('a', Term::True),
-          Term::SumClause.new('b', Term::False))
+          Term::CaseClause.new('a', Term::True),
+          Term::CaseClause.new('b', Term::False))
+      )
+    end
+
+    it 'parses a tagged term' do
+      expect(Parser.parse '<foo=true> as Bool').to eq(
+        Term::Tagged.new('foo', Term::True, Type::Boolean)
+      )
+    end
+
+    it 'parses a variant case expression' do
+      expect(Parser.parse 'case <bar=0> as Nat of <foo=x> ⇒ x | <bar=y> ⇒ y | <qux=z> ⇒ z').to eq(
+        Term::VarCase.new(
+          Term::Tagged.new('bar', Term::Zero, Type::Natural),
+          'foo' => Term::CaseClause.new('x', Term::Var.new('x')),
+          'bar' => Term::CaseClause.new('y', Term::Var.new('y')),
+          'qux' => Term::CaseClause.new('z', Term::Var.new('z')))
       )
     end
   end
@@ -386,6 +402,15 @@ RSpec.describe Parser do
         Type::Sum.new(
           Type::Product.new(Type::Natural, Type::Boolean),
           Type::Natural)
+      )
+    end
+
+    it 'parses a variant type' do
+      expect(Parser.parse '<foo: Nat, bar: Bool → Bool, qux: Unit>').to eq(
+        Type::Variant.new(
+          'foo' => Type::Natural,
+          'bar' => Type::Function.new(Type::Boolean, Type::Boolean),
+          'qux' => Type::Unit)
       )
     end
   end

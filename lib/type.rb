@@ -22,7 +22,7 @@ module Type
     def inspect
       'Nat'
     end
-  end
+  end.new
 
   Base = Struct.new(:name) do
     include Term::Atom
@@ -49,6 +49,15 @@ module Type
     end
   end
 
+  Sum = Struct.new(:left, :right) do
+    include Term::Compound
+
+    def inspect
+      r = right.is_a?(Sum) ? right.inspect : right.atomic
+      "#{left.atomic} + #{r}"
+    end
+  end
+
   Tuple = Struct.new(:members) do
     include Term::Atom
 
@@ -66,12 +75,12 @@ module Type
     end
   end
 
-  Sum = Struct.new(:left, :right) do
-    include Term::Compound
+  Variant = Struct.new(:clauses) do
+    include Term::Atom
 
     def inspect
-      r = right.is_a?(Sum) ? right.inspect : right.atomic
-      "#{left.atomic} + #{r}"
+      pairs = clauses.map { |k, t| "#{k}: #{t.inspect}" }
+      "<#{pairs * ', '}>"
     end
   end
 end

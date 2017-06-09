@@ -182,11 +182,30 @@ module Term
     end
   end
 
-  SumClause = Struct.new(:param, :body) do
+  VarCase = Struct.new(:term, :clauses) do
+    include Atom
+
+    def inspect
+      cs = clauses.map do |label, clause|
+        "<#{label}=#{clause.param}> ⇒ #{clause.body.atomic}"
+      end
+      "case #{term.atomic} of #{cs * ' | '}"
+    end
+  end
+
+  CaseClause = Struct.new(:param, :body) do
     include Atom
 
     def inspect
       "#{param} ⇒ #{body.atomic}"
+    end
+  end
+
+  Tagged = Struct.new(:label, :term, :type) do
+    include Atom
+
+    def inspect
+      "<#{label}=#{term.inspect}> as #{type.atomic}"
     end
   end
 end

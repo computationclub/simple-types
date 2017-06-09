@@ -104,7 +104,7 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ### Sums
 
-In these terms, `clause` means `Term::SumClause(param: string, body: term)`
+In these terms, `clause` means `Term::CaseClause(param: string, body: term)`
 
 | Syntax                             | Node                                                     |
 | ---------------------------------- | -------------------------------------------------------- |
@@ -114,3 +114,13 @@ In these terms, `clause` means `Term::SumClause(param: string, body: term)`
 | `inr t as T`                       | `Term::Inr(term: term, type: type)`                      |
 | `case t of inl x ⇒ t \| inr x ⇒ t` | `Term::SumCase(term: term, left: clause, right: clause)` |
 | `T + T`                            | `Type::Sum(left: type, right: type)`                     |
+
+### Variants
+
+In these terms, `clause` means `Term::CaseClause(param: string, body: term)`
+
+| Syntax                                        | Node                                                     |
+| --------------------------------------------- | -------------------------------------------------------- |
+| `<label=t> as T`                              | `Term::Tagged(label: string, term: term, type: type)`    |
+| `case t of <foo=x> ⇒ t \| <bar=x> ⇒ t \| ...` | `Term::VarCase(term: term, clauses: {string => clause})` |
+| `<foo: T, bar: T, ...>`                       | `Type::Variant(clauses: {string => type})`               |

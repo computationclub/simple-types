@@ -25,6 +25,10 @@ module Parser
       end
     end
 
+    def term_tagged(t, a, b, el)
+      Term::Tagged.new(el[2].text, el[6], el[12])
+    end
+
     def term_app(t, a, b, el)
       args = el[1].map(&:app_operand)
       args.inject(el[0]) { |x, y| Term::Application.new(x, y) }
@@ -109,7 +113,16 @@ module Parser
     end
 
     def term_sum_clause(t, a, b, el)
-      Term::SumClause.new(el[0].name, el[4])
+      Term::CaseClause.new(el[0].name, el[4])
+    end
+
+    def term_var_case(t, a, b, el)
+      clauses = [el[6]] + el[7].map(&:var_clause)
+      Term::VarCase.new(el[2], Hash[clauses])
+    end
+
+    def term_var_clause(t, a, b, el)
+      [el[2].text, Term::CaseClause.new(el[6].name, el[12])]
     end
 
     def type_func(t, a, b, el)
@@ -136,6 +149,10 @@ module Parser
       Type::Product.new(el[0], el[4])
     end
 
+    def type_sum(t, a, b, el)
+      Type::Sum.new(el[0], el[4])
+    end
+
     def type_tuple(t, a, b, el)
       types = [el[2]] + el[4].map(&:type_expr)
       Type::Tuple.new(types)
@@ -147,8 +164,10 @@ module Parser
       Type::Record.new(Hash[pairs])
     end
 
-    def type_sum(t, a, b, el)
-      Type::Sum.new(el[0], el[4])
+    def type_variant(t, a, b, el)
+      pairs = [el[1]] + el[2].map(&:rt_pair)
+      pairs = pairs.map { |pair| [pair.label.text, pair.type_expr] }
+      Type::Variant.new(Hash[pairs])
     end
 
   end

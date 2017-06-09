@@ -32,6 +32,9 @@ sequence          <-  term_expr _* ";" _* statement               %term_seq
 
 ascribed_term     <-  ascribable _+ "as" _+ type_expr             %term_ascribe
 
+                   /  "<" _* label _* "=" _* term_expr _* ">"
+                      _+ "as" _+ type_expr                        %term_tagged
+
 application       <-  app_operand (_+ app_operand)+               %term_app
 
 abstraction       <-  "λ" _* variable _* ":" _* type_expr
@@ -78,6 +81,7 @@ label             <-  [A-Za-z0-9_-]+
 
 case_expr         <-  inject_expr
                    /  sum_case
+                   /  var_case
 
 inject_expr       <-  ("inl" / "inr") _+ ascribable               %term_inject
 
@@ -86,6 +90,12 @@ sum_case          <-  "case" _+ term_expr _+ "of" _+
                       "inr" _+ sum_clause                         %term_sum_case
 
 sum_clause        <-  variable _* "⇒" _* term_expr                %term_sum_clause
+
+var_case          <-  "case" _+ term_expr _+ "of" _+
+                      var_clause (_* "|" _* var_clause)*          %term_var_case
+
+var_clause        <-  "<" _* label _* "=" _* variable _* ">"
+                      _* "⇒" _* term_expr                         %term_var_clause
 
 _                 <-  [ \n\r\t]
 
@@ -105,6 +115,7 @@ pair_part         <-  paren_type
                    /  base_type
                    /  tuple_type
                    /  record_type
+                   /  variant_type
 
 paren_type        <-  "(" _* type_expr _* ")"                     %paren_term
 
@@ -127,3 +138,5 @@ tuple_type        <-  "{" _* type_expr _*
 
 record_type       <-  "{" rt_pair ("," rt_pair)* "}"              %type_record
 rt_pair           <-  _* label _* ":" _* type_expr _*
+
+variant_type      <-  "<" rt_pair ("," rt_pair)* ">"              %type_variant
