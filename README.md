@@ -16,78 +16,59 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ## AST nodes
 
-### Terms
-
-Lambda calculus:
+### Lambda calculus
 
 - `Term::Var(name: string)`
 - `Term::Abs(param: string, type: type, body: term)`
 - `Term::Application(left: term, right: term)`
+- `Type::Function(from: type, to: type)`
 
-Booleans:
+### Booleans
 
 - `Term::True`
 - `Term::False`
 - `Term::If(condition: term, consequent: term, alternate: term)`
+- `Type::Boolean`
 
-Numeric:
+### Numeric
 
 - `Term::Zero`
 - `Term::Succ(arg: term)`
 - `Term::Pred(arg: term)`
 - `Term::Iszero(arg: term)`
-
-Unit type:
-
-- `Term::Unit`
-
-Sequencing:
-
-- `Term::Sequence(first: term, last: term)`
-
-Ascription:
-
-- `Term::Ascribe(term: term, type: type)`
-
-Let binding:
-
-- `Term::Let(param: string, arg: term, body: term)`
-
-Pairs:
-
-- `Term::Project(term: term, field: int)`
-- `Term::Pair(first: term, second: term)`
-
-Tuples:
-
-- `Term::Tuple(members: [term])`
-
-### Types
-
-Lambda calculus:
-
-- `Type::Function(from: type, to: type)`
-
-Booleans:
-
-- `Type::Boolean`
-
-Numeric:
-
 - `Type::Natural`
 
-Base types:
+### Base types
 
 - `Type::Base(name: string)`
 
-Unit type:
+### Unit type
 
+- `Term::Unit`
 - `Type::Unit`
 
-Pairs:
+### Sequencing
 
+- `Term::Sequence(first: term, last: term)`
+
+### Ascription
+
+- `Term::Ascribe(term: term, type: type)`
+
+### Let binding
+
+- `Term::Let(param: string, arg: term, body: term)`
+
+### Projection
+
+- `Term::Project(term: term, field: int)`
+
+### Pairs
+
+- `Term::Pair(first: term, second: term)`
 - `Type::Pair(first: type, second: type)`
 
-Tuples:
+### Tuples
 
+- `Term::Tuple(members: [term])`
 - `Type::Tuple(members: [type])`
