@@ -18,62 +18,86 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ### Lambda calculus
 
-- `Term::Var(name: string)`
-- `Term::Abs(param: string, type: type, body: term)`
-- `Term::Application(left: term, right: term)`
-- `Type::Function(from: type, to: type)`
+| Syntax    | Node                                               |
+| --------- | -------------------------------------------------- |
+| `x`       | `Term::Var(name: string)`                          |
+| `λx:T. t` | `Term::Abs(param: string, type: type, body: term)` |
+| `t t`     | `Term::Application(left: term, right: term)`       |
+| `T → T`   | `Type::Function(from: type, to: type)`             |
 
 ### Booleans
 
-- `Term::True`
-- `Term::False`
-- `Term::If(condition: term, consequent: term, alternate: term)`
-- `Type::Boolean`
+| Syntax               | Node                                                           |
+| -------------------- | -------------------------------------------------------------- |
+| `true`               | `Term::True`                                                   |
+| `false`              | `Term::False`                                                  |
+| `if t then t else t` | `Term::If(condition: term, consequent: term, alternate: term)` |
+| `Bool`               | `Type::Boolean`                                                |
 
 ### Numeric
 
-- `Term::Zero`
-- `Term::Succ(arg: term)`
-- `Term::Pred(arg: term)`
-- `Term::Iszero(arg: term)`
-- `Type::Natural`
+| Syntax     | Node                      |
+| ---------- | ------------------------- |
+| `0`        | `Term::Zero`              |
+| `succ t`   | `Term::Succ(arg: term)`   |
+| `pred t`   | `Term::Pred(arg: term)`   |
+| `iszero t` | `Term::Iszero(arg: term)` |
+| `Nat`      | `Type::Natural`           |
 
 ### Base types
 
-- `Type::Base(name: string)`
+| Syntax | Node                       |
+| ------ | -------------------------- |
+| `T`    | `Type::Base(name: string)` |
 
 ### Unit type
 
-- `Term::Unit`
-- `Type::Unit`
+| Syntax | Node         |
+| ------ | ------------ |
+| `unit` | `Term::Unit` |
+| `Unit` | `Type::Unit` |
 
 ### Sequencing
 
-- `Term::Sequence(first: term, last: term)`
+| Syntax  | Node                                      |
+| ------- | ----------------------------------------- |
+| `t ; t` | `Term::Sequence(first: term, last: term)` |
 
 ### Ascription
 
-- `Term::Ascribe(term: term, type: type)`
+| Syntax   | Node                                    |
+| -------- | --------------------------------------- |
+| `t as T` | `Term::Ascribe(term: term, type: type)` |
 
 ### Let binding
 
-- `Term::Let(param: string, arg: term, body: term)`
+| Syntax         | Node                                              |
+| -------------- | ------------------------------------------------- |
+| `let x=t in t` | `Term::Let(param: string, arg: term, body: term)` |
 
 ### Projection
 
-- `Term::Project(term: term, field: int | string)`
+| Syntax         | Node                                              |
+| -------------- | ------------------------------------------------- |
+| `t.1`, `t.foo` | `Term::Project(term: term, field: int \| string)` |
 
 ### Pairs
 
-- `Term::Pair(first: term, second: term)`
-- `Type::Pair(first: type, second: type)`
+| Syntax     | Node                                    |
+| ---------- | --------------------------------------- |
+| `{t \| t}` | `Term::Pair(first: term, second: term)` |
+| `T × T`    | `Type::Pair(first: type, second: type)` |
 
 ### Tuples
 
-- `Term::Tuple(members: [term])`
-- `Type::Tuple(members: [type])`
+| Syntax        | Node                           |
+| ------------- | ------------------------------ |
+| `{t, t, ...}` | `Term::Tuple(members: [term])` |
+| `{T, T, ...}` | `Type::Tuple(members: [type])` |
 
 ### Records
 
-- `Term::Record(members: {string => term})`
-- `Type::Record(members: {string => type})`
+| Syntax                  | Node                                      |
+| ----------------------- | ----------------------------------------- |
+| `{foo=t, bar=t, ...}`   | `Term::Record(members: {string => term})` |
+| `{foo: T, bar: T, ...}` | `Type::Record(members: {string => type})` |
