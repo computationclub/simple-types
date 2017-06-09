@@ -262,6 +262,30 @@ RSpec.describe Parser do
       )
     end
 
+    it 'parses an inl term' do
+      expect(Parser.parse 'inl x').to eq(Term::Inl.new(Term::Var.new('x')))
+    end
+
+    it 'parses an inr term' do
+      expect(Parser.parse 'inr x').to eq(Term::Inr.new(Term::Var.new('x')))
+    end
+
+    it 'parses an inr term with ascription' do
+      expect(Parser.parse 'inr x as Nat').to eq(
+        Term::Ascribe.new(
+          Term::Inr.new(Term::Var.new('x')),
+          Type::Natural)
+      )
+    end
+
+    it 'parses a sum case expression' do
+      expect(Parser.parse 'case x of inl a ⇒ true | inr b ⇒ false').to eq(
+        Term::SumCase.new(
+          Term::Var.new('x'),
+          Term::SumClause.new('a', Term::True),
+          Term::SumClause.new('b', Term::False))
+      )
+    end
   end
 
   describe 'types' do
@@ -342,6 +366,28 @@ RSpec.describe Parser do
         Type::Record.new(
           'foo' => Type::Function.new(Type::Boolean, Type::Unit),
           'bar' => Type::Natural)
+      )
+    end
+
+    it 'parses the sum type' do
+      expect(Parser.parse 'Nat + Bool').to eq(
+        Type::Sum.new(Type::Natural, Type::Boolean)
+      )
+    end
+
+    it 'parses the sum type with higher precedence than the function type' do
+      expect(Parser.parse 'Nat → Bool + Nat').to eq(
+        Type::Function.new(
+          Type::Natural,
+          Type::Sum.new(Type::Boolean, Type::Natural))
+      )
+    end
+
+    it 'parses the sum type with lower precedence than the pair type' do
+      expect(Parser.parse 'Nat × Bool + Nat').to eq(
+        Type::Sum.new(
+          Type::Pair.new(Type::Natural, Type::Boolean),
+          Type::Natural)
       )
     end
   end

@@ -92,6 +92,21 @@ module Parser
       Term::Record.new(Hash[pairs])
     end
 
+    def term_inject(t, a, b, el)
+      case el[0].text
+      when 'inl' then Term::Inl.new(el[2])
+      when 'inr' then Term::Inr.new(el[2])
+      end
+    end
+
+    def term_sum_case(t, a, b, el)
+      Term::SumCase.new(el[2], el[8], el[14])
+    end
+
+    def term_sum_clause(t, a, b, el)
+      Term::SumClause.new(el[0].name, el[4])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end
@@ -125,6 +140,10 @@ module Parser
       pairs = [el[1]] + el[2].map(&:rt_pair)
       pairs = pairs.map { |pair| [pair.label.text, pair.type_expr] }
       Type::Record.new(Hash[pairs])
+    end
+
+    def type_sum(t, a, b, el)
+      Type::Sum.new(el[0], el[4])
     end
 
   end

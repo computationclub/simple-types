@@ -24,6 +24,7 @@ proj_base       <-  paren_expr
                  /  pair_expr
                  /  tuple_expr
                  /  record_expr
+                 /  case_expr
 
 paren_expr      <-  "(" _* statement _* ")"                 %paren_term
 
@@ -75,12 +76,26 @@ record_expr     <-  "{" record_pair ("," record_pair)* "}"  %term_record
 record_pair     <-  _* label _* "=" _* term_expr _*
 label           <-  [A-Za-z0-9_-]+
 
+case_expr       <-  inject_expr
+                 /  sum_case
+
+inject_expr     <-  ("inl" / "inr") _+ ascribable           %term_inject
+
+sum_case        <-  "case" _+ term_expr _+ "of" _+
+                    "inl" _+ sum_clause _* "|" _*
+                    "inr" _+ sum_clause                     %term_sum_case
+
+sum_clause      <-  variable _* "⇒" _* term_expr            %term_sum_clause
+
 _               <-  [ \n\r\t]
 
 type_expr       <-  function_type
                  /  func_operand
 
-func_operand    <-  pair_type
+func_operand    <-  sum_type
+                 /  sum_part
+
+sum_part        <-  pair_type
                  /  pair_part
 
 pair_part       <-  paren_type
@@ -95,7 +110,9 @@ paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
 
 function_type   <-  func_operand _* "→" _* type_expr        %type_func
 
-pair_type       <-  pair_part _* "×" _* func_operand        %type_pair
+sum_type        <-  sum_part _* "+" _* func_operand         %type_sum
+
+pair_type       <-  pair_part _* "×" _* sum_part            %type_pair
 
 boolean_type    <-  "Bool"                                  %type_bool
 

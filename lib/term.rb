@@ -157,4 +157,36 @@ module Term
       "{#{pairs * ', '}}"
     end
   end
+
+  Inl = Struct.new(:term) do
+    include Atom
+
+    def inspect
+      "inl #{term.atomic}"
+    end
+  end
+
+  Inr = Struct.new(:term) do
+    include Atom
+
+    def inspect
+      "inr #{term.atomic}"
+    end
+  end
+
+  SumCase = Struct.new(:term, :left, :right) do
+    include Compound
+
+    def inspect
+      "case #{term.atomic} of inl #{left.inspect} | inr #{right.inspect}"
+    end
+  end
+
+  SumClause = Struct.new(:param, :body) do
+    include Atom
+
+    def inspect
+      "#{param} ⇒ #{body.atomic}"
+    end
+  end
 end
