@@ -25,6 +25,7 @@ proj_base         <-  paren_expr
                    /  tuple_expr
                    /  record_expr
                    /  case_expr
+                   /  list_expr
 
 paren_expr        <-  "(" _* statement _* ")"                     %paren_term
 
@@ -96,6 +97,26 @@ var_case          <-  "case" _+ term_expr _+ "of" _+
 
 var_clause        <-  "<" _* label _* "=" _* variable _* ">"
                       _* "⇒" _* term_expr                         %term_var_clause
+
+list_expr         <-  nil_expr
+                   /  cons_expr
+                   /  isnil_expr
+                   /  head_expr
+                   /  tail_expr
+
+nil_expr          <-  "nil" _* "[" _* type_expr _* "]"            %term_nil
+
+cons_expr         <-  "cons" _* "[" _* type_expr _* "]" _*
+                      app_operand _+ app_operand                  %term_cons
+
+isnil_expr        <-  "isnil" _* "[" _* type_expr _* "]" _*
+                      app_operand                                 %term_isnil
+
+head_expr         <-  "head" _* "[" _* type_expr _* "]" _*
+                      app_operand                                 %term_head
+
+tail_expr         <-  "tail" _* "[" _* type_expr _* "]" _*
+                      app_operand                                 %term_tail
 
 _                 <-  [ \n\r\t]
 

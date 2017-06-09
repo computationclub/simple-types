@@ -125,6 +125,26 @@ module Parser
       [el[2].text, Term::CaseClause.new(el[6].name, el[12])]
     end
 
+    def term_nil(t, a, b, el)
+      Term::Nil.new(el[4])
+    end
+
+    def term_cons(t, a, b, el)
+      Term::Cons.new(el[4], el[8], el[10])
+    end
+
+    def term_isnil(t, a, b, el)
+      Term::Isnil.new(el[4], el[8])
+    end
+
+    def term_head(t, a, b, el)
+      Term::Head.new(el[4], el[8])
+    end
+
+    def term_tail(t, a, b, el)
+      Term::Tail.new(el[4], el[8])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end

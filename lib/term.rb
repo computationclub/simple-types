@@ -208,4 +208,44 @@ module Term
       "<#{label}=#{term.inspect}> as #{type.atomic}"
     end
   end
+
+  Nil = Struct.new(:type) do
+    include Compound
+
+    def inspect
+      "nil[#{type.inspect}]"
+    end
+  end
+
+  Cons = Struct.new(:type, :head, :tail) do
+    include Compound
+
+    def inspect
+      "cons[#{type.inspect}] #{head.atomic} #{tail.atomic}"
+    end
+  end
+
+  Isnil = Struct.new(:type, :term) do
+    include Compound
+
+    def inspect
+      "isnil[#{type.inspect}] #{term.atomic}"
+    end
+  end
+
+  Head = Struct.new(:type, :term) do
+    include Compound
+
+    def inspect
+      "head[#{type.inspect}] #{term.atomic}"
+    end
+  end
+
+  Tail = Struct.new(:type, :term) do
+    include Compound
+
+    def inspect
+      "tail[#{type.inspect}] #{term.atomic}"
+    end
+  end
 end

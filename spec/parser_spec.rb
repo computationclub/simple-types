@@ -300,6 +300,34 @@ RSpec.describe Parser do
           'qux' => Term::CaseClause.new('z', Term::Var.new('z')))
       )
     end
+
+    it 'parses nil' do
+      expect(Parser.parse 'nil[Bool]').to eq(Term::Nil.new(Type::Boolean))
+    end
+
+    it 'parses cons' do
+      expect(Parser.parse 'cons[Bool] x y').to eq(
+        Term::Cons.new(Type::Boolean, Term::Var.new('x'), Term::Var.new('y'))
+      )
+    end
+
+    it 'parses isnil' do
+      expect(Parser.parse 'isnil[Bool] x').to eq(
+        Term::Isnil.new(Type::Boolean, Term::Var.new('x'))
+      )
+    end
+
+    it 'parses head' do
+      expect(Parser.parse 'head[Bool] x').to eq(
+        Term::Head.new(Type::Boolean, Term::Var.new('x'))
+      )
+    end
+
+    it 'parses tail' do
+      expect(Parser.parse 'tail[Bool] x').to eq(
+        Term::Tail.new(Type::Boolean, Term::Var.new('x'))
+      )
+    end
   end
 
   describe 'types' do

@@ -124,3 +124,14 @@ In these terms, `clause` means `Term::CaseClause(param: string, body: term)`
 | `<label=t> as T`                              | `Term::Tagged(label: string, term: term, type: type)`    |
 | `case t of <foo=x> ⇒ t \| <bar=x> ⇒ t \| ...` | `Term::VarCase(term: term, clauses: {string => clause})` |
 | `<foo: T, bar: T, ...>`                       | `Type::Variant(clauses: {string => type})`               |
+
+### Lists
+
+| Syntax        | Node                                             |
+| ------------- | ------------------------------------------------ |
+| `nil[T]`      | `Term::Nil(type: type)`                          |
+| `cons[T] t t` | `Term::Cons(type: type, head: term, tail: term)` |
+| `isnil[T] t`  | `Term::Isnil(type: type, term: term)`            |
+| `head[T] t`   | `Term::Head(type: type, term: term)`             |
+| `tail[T] t`   | `Term::Tail(type: type, term: term)`             |
+| `List T`      | `Type::List(type: type)`                         |
