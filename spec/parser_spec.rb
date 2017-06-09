@@ -231,6 +231,37 @@ RSpec.describe Parser do
     it 'parses a tuple projection' do
       expect(Parser.parse 'x.789').to eq(Term::Project.new(Term::Var.new('x'), 789))
     end
+
+    it 'parses a record' do
+      expect(Parser.parse '{foo=x, bar=0}').to eq(
+        Term::Record.new(
+          'foo' => Term::Var.new('x'),
+          'bar' => Term::Zero)
+      )
+    end
+
+    it 'parses a record projection' do
+      expect(Parser.parse 'x.foo').to eq(Term::Project.new(Term::Var.new('x'), 'foo'))
+    end
+
+    it 'parses a chain of record projections' do
+      expect(Parser.parse 'x.foo.bar').to eq(
+        Term::Project.new(
+          Term::Project.new(Term::Var.new('x'), 'foo'),
+          'bar')
+      )
+    end
+
+    it 'parses a chain of record and tuple projections' do
+      expect(Parser.parse 'x.foo.3.bar').to eq(
+        Term::Project.new(
+          Term::Project.new(
+            Term::Project.new(Term::Var.new('x'), 'foo'),
+            3),
+          'bar')
+      )
+    end
+
   end
 
   describe 'types' do
@@ -303,6 +334,14 @@ RSpec.describe Parser do
           Type::Function.new(Type::Natural, Type::Unit),
           Type::Pair.new(Type::Boolean, Type::Unit)
         ])
+      )
+    end
+
+    it 'parses a record type' do
+      expect(Parser.parse '{foo: Bool → Unit, bar: Nat}').to eq(
+        Type::Record.new(
+          'foo' => Type::Function.new(Type::Boolean, Type::Unit),
+          'bar' => Type::Natural)
       )
     end
   end

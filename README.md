@@ -61,7 +61,7 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ### Projection
 
-- `Term::Project(term: term, field: int)`
+- `Term::Project(term: term, field: int | string)`
 
 ### Pairs
 
@@ -72,3 +72,8 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 - `Term::Tuple(members: [term])`
 - `Type::Tuple(members: [type])`
+
+### Records
+
+- `Term::Record(members: {string => term})`
+- `Type::Record(members: {string => type})`

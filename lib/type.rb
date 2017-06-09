@@ -56,4 +56,13 @@ module Type
       "{#{members.map(&:inspect) * ', '}}"
     end
   end
+
+  Record = Struct.new(:members) do
+    include Term::Atom
+
+    def inspect
+      pairs = members.map { |k, t| "#{k}: #{t.inspect}" }
+      "{#{pairs * ', '}}"
+    end
+  end
 end

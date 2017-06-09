@@ -70,7 +70,10 @@ module Parser
     end
 
     def term_project(t, a, b, el)
-      fields = el[1].map { |term| term.proj_field.text.to_i }
+      fields = el[1].map do |term|
+        text = term.proj_field.text
+        text =~ /^\d+$/ ? text.to_i : text
+      end
       fields.inject(el[0]) { |term, field| Term::Project.new(term, field) }
     end
 
@@ -81,6 +84,12 @@ module Parser
     def term_tuple(t, a, b, el)
       terms = [el[2]] + el[4].map(&:term_expr)
       Term::Tuple.new(terms)
+    end
+
+    def term_record(t, a, b, el)
+      pairs = [el[1]] + el[2].map(&:record_pair)
+      pairs = pairs.map { |pair| [pair.label.text, pair.term_expr] }
+      Term::Record.new(Hash[pairs])
     end
 
     def type_func(t, a, b, el)
@@ -110,6 +119,12 @@ module Parser
     def type_tuple(t, a, b, el)
       types = [el[2]] + el[4].map(&:type_expr)
       Type::Tuple.new(types)
+    end
+
+    def type_record(t, a, b, el)
+      pairs = [el[1]] + el[2].map(&:rt_pair)
+      pairs = pairs.map { |pair| [pair.label.text, pair.type_expr] }
+      Type::Record.new(Hash[pairs])
     end
 
   end

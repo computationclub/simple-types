@@ -23,6 +23,7 @@ proj_base       <-  paren_expr
                  /  let_binding
                  /  pair_expr
                  /  tuple_expr
+                 /  record_expr
 
 paren_expr      <-  "(" _* statement _* ")"                 %paren_term
 
@@ -62,13 +63,17 @@ let_binding     <-  "let" _+ variable _* "=" _*
                     term_expr _+ "in" _+ term_expr          %term_let
 
 projection      <-  proj_base (_* "." _* proj_field)+       %term_project
-proj_field      <-  [1-9] [0-9]*
+proj_field      <-  label / [1-9] [0-9]*
 
 pair_expr       <-  "{" _* term_expr _* "|" _*
                     term_expr _* "}"                        %term_pair
 
 tuple_expr      <-  "{" _* term_expr _*
                     ("," _* term_expr _*)+ "}"              %term_tuple
+
+record_expr     <-  "{" record_pair ("," record_pair)* "}"  %term_record
+record_pair     <-  _* label _* "=" _* term_expr _*
+label           <-  [A-Za-z0-9_-]+
 
 _               <-  [ \n\r\t]
 
@@ -84,6 +89,7 @@ pair_part       <-  paren_type
                  /  unit_type
                  /  base_type
                  /  tuple_type
+                 /  record_type
 
 paren_type      <-  "(" _* type_expr _* ")"                 %paren_term
 
@@ -101,3 +107,6 @@ base_type       <-  [A-Z] [A-Za-z]*                         %type_base
 
 tuple_type      <-  "{" _* type_expr _*
                     ("," _* type_expr _*)+ "}"              %type_tuple
+
+record_type     <-  "{" rt_pair ("," rt_pair)* "}"          %type_record
+rt_pair         <-  _* label _* ":" _* type_expr _*
