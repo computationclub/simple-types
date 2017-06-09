@@ -2,6 +2,12 @@ grammar Parser.Grammar
 
 expression        <-  _* (statement / type_expr) _*               %term_expression
 
+lambda            <-  "λ" / "\\"
+arrow             <-  "→" / "->"
+darrow            <-  "⇒" / "=>"
+times             <-  "×" / "*"
+_                 <-  [ \n\r\t]
+
 statement         <-  sequence
                    /  term_expr
 
@@ -38,7 +44,7 @@ ascribed_term     <-  ascribable _+ "as" _+ type_expr             %term_ascribe
 
 application       <-  app_operand (_+ app_operand)+               %term_app
 
-abstraction       <-  "λ" _* variable _* ":" _* type_expr
+abstraction       <-  lambda _* variable _* ":" _* type_expr
                       _* "." _* term_expr                         %term_abs
 
 variable          <-  [a-z] ![a-z]                                %term_var
@@ -90,13 +96,13 @@ sum_case          <-  "case" _+ term_expr _+ "of" _+
                       "inl" _+ sum_clause _* "|" _*
                       "inr" _+ sum_clause                         %term_sum_case
 
-sum_clause        <-  variable _* "⇒" _* term_expr                %term_sum_clause
+sum_clause        <-  variable _* darrow _* term_expr             %term_sum_clause
 
 var_case          <-  "case" _+ term_expr _+ "of" _+
                       var_clause (_* "|" _* var_clause)*          %term_var_case
 
 var_clause        <-  "<" _* label _* "=" _* variable _* ">"
-                      _* "⇒" _* term_expr                         %term_var_clause
+                      _* darrow _* term_expr                      %term_var_clause
 
 list_expr         <-  nil_expr
                    /  cons_expr
@@ -117,8 +123,6 @@ head_expr         <-  "head" _* "[" _* type_expr _* "]" _*
 
 tail_expr         <-  "tail" _* "[" _* type_expr _* "]" _*
                       app_operand                                 %term_tail
-
-_                 <-  [ \n\r\t]
 
 type_expr         <-  function_type
                    /  func_operand
@@ -141,11 +145,11 @@ pair_part         <-  paren_type
 
 paren_type        <-  "(" _* type_expr _* ")"                     %paren_term
 
-function_type     <-  func_operand _* "→" _* type_expr            %type_func
+function_type     <-  func_operand _* arrow _* type_expr          %type_func
 
 sum_type          <-  sum_part _* "+" _* func_operand             %type_sum
 
-pair_type         <-  pair_part _* "×" _* sum_part                %type_pair
+pair_type         <-  pair_part _* times _* sum_part              %type_pair
 
 boolean_type      <-  "Bool"                                      %type_bool
 

@@ -16,6 +16,17 @@ C. Pierce's "Types and Programming Languages" mobbed during a meeting of
 
 ## AST nodes
 
+### Symbolic operators
+
+This syntax makes use of a few non-ASCII symbols for operators. All have ASCII
+alternatives should you be working in an environment where typing these symbols
+is a faff. They are:
+
+- `λ`, used to begin an abstraction, alternative: `\`
+- `⇒`, to introduce case clause bodies, alternative: `=>`
+- `→`, the function type operator, alternative: `->`
+- `×`, the product type operator, alternative: `*`
+
 ### Lambda calculus
 
 | Syntax    | Node                                               |
