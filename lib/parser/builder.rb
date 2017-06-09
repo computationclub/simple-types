@@ -78,6 +78,11 @@ module Parser
       Term::Pair.new(el[2], el[6])
     end
 
+    def term_tuple(t, a, b, el)
+      terms = [el[2]] + el[4].map(&:term_expr)
+      Term::Tuple.new(terms)
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end

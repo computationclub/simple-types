@@ -58,6 +58,10 @@ Pairs:
 - `Term::Project(term: term, field: int)`
 - `Term::Pair(first: term, second: term)`
 
+Tuples:
+
+- `Term::Tuple(members: [term])`
+
 ### Types
 
 Lambda calculus:

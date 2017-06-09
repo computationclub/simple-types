@@ -137,7 +137,15 @@ module Term
     include Atom
 
     def inspect
-      "{#{first.atomic}, #{second.atomic}}"
+      "{#{first.atomic} | #{second.atomic}}"
+    end
+  end
+
+  Tuple = Struct.new(:members) do
+    include Atom
+
+    def inspect
+      "{#{members.map(&:inspect) * ', '}}"
     end
   end
 end

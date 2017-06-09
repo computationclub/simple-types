@@ -178,7 +178,7 @@ RSpec.describe Parser do
     end
 
     it 'parses a pair' do
-      expect(Parser.parse '{x y, z}').to eq(
+      expect(Parser.parse '{x y | z}').to eq(
         Term::Pair.new(
           Term::Application.new(Term::Var.new('x'), Term::Var.new('y')),
           Term::Var.new('z'))
@@ -186,13 +186,11 @@ RSpec.describe Parser do
     end
 
     it 'parses a pair projection' do
-      expect(Parser.parse 'x.1').to eq(
-        Term::Project.new(Term::Var.new('x'), 1)
-      )
+      expect(Parser.parse 'x.1').to eq(Term::Project.new(Term::Var.new('x'), 1))
     end
 
     it 'parses a chain of pair projections' do
-      expect(Parser.parse '{{x,y},z}.1.2').to eq(
+      expect(Parser.parse '{{x | y} | z}.1.2').to eq(
         Term::Project.new(
           Term::Project.new(
             Term::Pair.new(
@@ -218,6 +216,20 @@ RSpec.describe Parser do
           Term::Var.new('y'),
           Term::Project.new(Term::Var.new('z'), 2))
       )
+    end
+
+    it 'parses a tuple' do
+      expect(Parser.parse '{0, λx:Nat. unit, {true | unit}}').to eq(
+        Term::Tuple.new([
+          Term::Zero,
+          Term::Abs.new('x', Type::Natural, Term::Unit),
+          Term::Pair.new(Term::True, Term::Unit)
+        ])
+      )
+    end
+
+    it 'parses a tuple projection' do
+      expect(Parser.parse 'x.789').to eq(Term::Project.new(Term::Var.new('x'), 789))
     end
   end
 

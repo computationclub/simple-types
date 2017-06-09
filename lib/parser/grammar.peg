@@ -22,6 +22,7 @@ proj_base       <-  paren_expr
                  /  unit_expr
                  /  let_binding
                  /  pair_expr
+                 /  tuple_expr
 
 paren_expr      <-  "(" _* statement _* ")"                 %paren_term
 
@@ -63,8 +64,11 @@ let_binding     <-  "let" _+ variable _* "=" _*
 projection      <-  proj_base (_* "." _* proj_field)+       %term_project
 proj_field      <-  [1-9] [0-9]*
 
-pair_expr       <-  "{" _* term_expr _* "," _*
+pair_expr       <-  "{" _* term_expr _* "|" _*
                     term_expr _* "}"                        %term_pair
+
+tuple_expr      <-  "{" _* term_expr _*
+                    ("," _* term_expr _*)+ "}"              %term_tuple
 
 _               <-  [ \n\r\t]
 
