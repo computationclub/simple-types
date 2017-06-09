@@ -83,4 +83,12 @@ module Type
       "<#{pairs * ', '}>"
     end
   end
+
+  List = Struct.new(:type) do
+    include Term::Compound
+
+    def inspect
+      "List #{type.atomic}"
+    end
+  end
 end

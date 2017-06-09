@@ -161,6 +161,10 @@ module Parser
       Type::Unit
     end
 
+    def type_list(t, a, b, el)
+      Type::List.new(el[2])
+    end
+
     def type_base(t, a, b, el)
       Type::Base.new(t[a ... b])
     end

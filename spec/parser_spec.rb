@@ -379,13 +379,13 @@ RSpec.describe Parser do
       expect(Parser.parse 'Unit').to eq(Type::Unit)
     end
 
-    it 'parses the pair type' do
+    it 'parses the product type' do
       expect(Parser.parse 'Nat × Bool').to eq(
         Type::Product.new(Type::Natural, Type::Boolean)
       )
     end
 
-    it 'parses the pair type with higher precedence than the function type' do
+    it 'parses the product type with higher precedence than the function type' do
       expect(Parser.parse 'Nat → Bool × Nat').to eq(
         Type::Function.new(
           Type::Natural,
@@ -425,7 +425,7 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses the sum type with lower precedence than the pair type' do
+    it 'parses the sum type with lower precedence than the product type' do
       expect(Parser.parse 'Nat × Bool + Nat').to eq(
         Type::Sum.new(
           Type::Product.new(Type::Natural, Type::Boolean),
@@ -439,6 +439,18 @@ RSpec.describe Parser do
           'foo' => Type::Natural,
           'bar' => Type::Function.new(Type::Boolean, Type::Boolean),
           'qux' => Type::Unit)
+      )
+    end
+
+    it 'parses the list type' do
+      expect(Parser.parse 'List Bool').to eq(Type::List.new(Type::Boolean))
+    end
+
+    it 'parses the list type as higher precedence than the product type' do
+      expect(Parser.parse 'List Nat × Bool').to eq(
+        Type::Product.new(
+          Type::List.new(Type::Natural),
+          Type::Boolean)
       )
     end
   end

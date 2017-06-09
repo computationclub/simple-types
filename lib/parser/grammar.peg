@@ -133,6 +133,7 @@ pair_part         <-  paren_type
                    /  boolean_type
                    /  numeric_type
                    /  unit_type
+                   /  list_type
                    /  base_type
                    /  tuple_type
                    /  record_type
@@ -151,6 +152,8 @@ boolean_type      <-  "Bool"                                      %type_bool
 numeric_type      <-  "Nat"                                       %type_nat
 
 unit_type         <-  "Unit"                                      %type_unit
+
+list_type         <-  "List" _+ pair_part                         %type_list
 
 base_type         <-  [A-Z] [A-Za-z]*                             %type_base
 
