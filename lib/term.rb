@@ -158,19 +158,19 @@ module Term
     end
   end
 
-  Inl = Struct.new(:term) do
+  Inl = Struct.new(:term, :type) do
     include Atom
 
     def inspect
-      "inl #{term.atomic}"
+      "inl #{term.atomic} as #{type.atomic}"
     end
   end
 
-  Inr = Struct.new(:term) do
+  Inr = Struct.new(:term, :type) do
     include Atom
 
     def inspect
-      "inr #{term.atomic}"
+      "inr #{term.atomic} as #{type.atomic}"
     end
   end
 

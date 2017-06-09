@@ -272,9 +272,7 @@ RSpec.describe Parser do
 
     it 'parses an inr term with ascription' do
       expect(Parser.parse 'inr x as Nat').to eq(
-        Term::Ascribe.new(
-          Term::Inr.new(Term::Var.new('x')),
-          Type::Natural)
+        Term::Inr.new(Term::Var.new('x'), Type::Natural)
       )
     end
 

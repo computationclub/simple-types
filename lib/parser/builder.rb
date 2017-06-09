@@ -17,7 +17,12 @@ module Parser
     end
 
     def term_ascribe(t, a, b, el)
-      Term::Ascribe.new(el[0], el[4])
+      term, type = el[0], el[4]
+      case term
+      when Term::Inl then Term::Inl.new(term.term, type)
+      when Term::Inr then Term::Inr.new(term.term, type)
+      else                Term::Ascribe.new(term, type)
+      end
     end
 
     def term_app(t, a, b, el)

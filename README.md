@@ -110,7 +110,7 @@ In these terms, `clause` means `Term::SumClause(param: string, body: term)`
 | ---------------------------------- | -------------------------------------------------------- |
 | `inl t`                            | `Term::Inl(term: term)`                                  |
 | `inr t`                            | `Term::Inr(term: term)`                                  |
-| `inl t as T`                       | `Term::Ascribe(term: Term::Inl(term: term), type: type)` |
-| `inr t as T`                       | `Term::Ascribe(term: Term::Inr(term: term), type: type)` |
+| `inl t as T`                       | `Term::Inl(term: term, type: type)`                      |
+| `inr t as T`                       | `Term::Inr(term: term, type: type)`                      |
 | `case t of inl x ⇒ t \| inr x ⇒ t` | `Term::SumCase(term: term, left: clause, right: clause)` |
 | `T + T`                            | `Type::Sum(first: type, second: type)`                   |
