@@ -130,10 +130,10 @@ type_expr         <-  function_type
 func_operand      <-  sum_type
                    /  sum_part
 
-sum_part          <-  pair_type
-                   /  pair_part
+sum_part          <-  product_type
+                   /  product_part
 
-pair_part         <-  paren_type
+product_part      <-  paren_type
                    /  boolean_type
                    /  numeric_type
                    /  unit_type
@@ -149,7 +149,7 @@ function_type     <-  func_operand _* arrow _* type_expr          %type_func
 
 sum_type          <-  sum_part _* "+" _* func_operand             %type_sum
 
-pair_type         <-  pair_part _* times _* sum_part              %type_pair
+product_type      <-  product_part _* times _* sum_part           %type_pair
 
 boolean_type      <-  "Bool"                                      %type_bool
 
@@ -157,7 +157,7 @@ numeric_type      <-  "Nat"                                       %type_nat
 
 unit_type         <-  "Unit"                                      %type_unit
 
-list_type         <-  "List" _+ pair_part                         %type_list
+list_type         <-  "List" _+ product_part                      %type_list
 
 base_type         <-  [A-Z] [A-Za-z]*                             %type_base
 
