@@ -124,11 +124,11 @@ module Term
     end
   end
 
-  Project = Struct.new(:term, :field) do
+  Project = Struct.new(:object, :field) do
     include Atom
 
     def inspect
-      "#{term.atomic}.#{field}"
+      "#{object.atomic}.#{field}"
     end
   end
 
@@ -224,27 +224,27 @@ module Term
     end
   end
 
-  Isnil = Struct.new(:type, :term) do
+  Isnil = Struct.new(:type, :arg) do
     include Compound
 
     def inspect
-      "isnil[#{type.inspect}] #{term.atomic}"
+      "isnil[#{type.inspect}] #{arg.atomic}"
     end
   end
 
-  Head = Struct.new(:type, :term) do
+  Head = Struct.new(:type, :arg) do
     include Compound
 
     def inspect
-      "head[#{type.inspect}] #{term.atomic}"
+      "head[#{type.inspect}] #{arg.atomic}"
     end
   end
 
-  Tail = Struct.new(:type, :term) do
+  Tail = Struct.new(:type, :arg) do
     include Compound
 
     def inspect
-      "tail[#{type.inspect}] #{term.atomic}"
+      "tail[#{type.inspect}] #{arg.atomic}"
     end
   end
 end

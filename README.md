@@ -88,9 +88,9 @@ is a faff. They are:
 
 ### Projection
 
-| Syntax         | Node                                              |
-| -------------- | ------------------------------------------------- |
-| `t.1`, `t.foo` | `Term::Project(term: term, field: int \| string)` |
+| Syntax         | Node                                                |
+| -------------- | --------------------------------------------------- |
+| `t.1`, `t.foo` | `Term::Project(object: term, field: int \| string)` |
 
 ### Pairs
 
@@ -142,7 +142,7 @@ In these terms, `clause` means `Term::CaseClause(param: string, body: term)`
 | ------------- | ------------------------------------------------ |
 | `nil[T]`      | `Term::Nil(type: type)`                          |
 | `cons[T] t t` | `Term::Cons(type: type, head: term, tail: term)` |
-| `isnil[T] t`  | `Term::Isnil(type: type, term: term)`            |
-| `head[T] t`   | `Term::Head(type: type, term: term)`             |
-| `tail[T] t`   | `Term::Tail(type: type, term: term)`             |
+| `isnil[T] t`  | `Term::Isnil(type: type, arg: term)`             |
+| `head[T] t`   | `Term::Head(type: type, arg: term)`              |
+| `tail[T] t`   | `Term::Tail(type: type, arg: term)`              |
 | `List T`      | `Type::List(type: type)`                         |
