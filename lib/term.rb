@@ -125,11 +125,10 @@ module Term
   end
 
   Project = Struct.new(:term, :field) do
-    include Compound
+    include Atom
 
     def inspect
-      base = term.is_a?(Project) ? term.inspect : term.atomic
-      "#{base}.#{field}"
+      "#{term.atomic}.#{field}"
     end
   end
 
@@ -137,7 +136,7 @@ module Term
     include Atom
 
     def inspect
-      "{#{left.atomic} | #{right.atomic}}"
+      "{#{left.inspect} | #{right.inspect}}"
     end
   end
 
