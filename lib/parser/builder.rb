@@ -8,7 +8,7 @@ module Parser
       el[1]
     end
 
-    def paren_term(t, a, b, el)
+    def paren_expr(t, a, b, el)
       el[2]
     end
 
