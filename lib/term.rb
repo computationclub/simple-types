@@ -136,7 +136,7 @@ module Term
     include Atom
 
     def inspect
-      "{#{left.inspect} | #{right.inspect}}"
+      "{#{left.atomic} | #{right.atomic}}"
     end
   end
 
@@ -144,7 +144,7 @@ module Term
     include Atom
 
     def inspect
-      "{#{members.map(&:inspect) * ', '}}"
+      "{#{members.map(&:atomic) * ', '}}"
     end
   end
 
@@ -152,7 +152,7 @@ module Term
     include Atom
 
     def inspect
-      pairs = members.map { |k, t| "#{k} = #{t.inspect}" }
+      pairs = members.map { |k, t| "#{k} = #{t.atomic}" }
       "{#{pairs * ', '}}"
     end
   end
@@ -177,12 +177,12 @@ module Term
     include Compound
 
     def inspect
-      "case #{term.atomic} of inl #{left.inspect} | inr #{right.inspect}"
+      "case #{term.atomic} of inl #{left.atomic} | inr #{right.atomic}"
     end
   end
 
   VarCase = Struct.new(:term, :clauses) do
-    include Atom
+    include Compound
 
     def inspect
       cs = clauses.map do |label, clause|
@@ -193,8 +193,6 @@ module Term
   end
 
   CaseClause = Struct.new(:param, :body) do
-    include Atom
-
     def inspect
       "#{param} ⇒ #{body.atomic}"
     end

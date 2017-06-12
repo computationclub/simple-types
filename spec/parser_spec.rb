@@ -58,7 +58,7 @@ RSpec.describe Parser do
     end
 
     it 'parses an application taking an abstraction' do
-      expect(Parser.parse 'x λy:Bool. y').to eq(
+      expect(Parser.parse 'x (λy:Bool. y)').to eq(
         Term::Application.new(
           Term::Var.new('x'),
           Term::Abs.new('y', Type::Boolean, Term::Var.new('y')))
@@ -80,7 +80,7 @@ RSpec.describe Parser do
     end
 
     it 'parses a nested if-expression' do
-      expect(Parser.parse 'if x then if a then b else c else z').to eq(
+      expect(Parser.parse 'if x then (if a then b else c) else z').to eq(
         Term::If.new(
           Term::Var.new('x'),
           Term::If.new(Term::Var.new('a'), Term::Var.new('b'), Term::Var.new('c')),
@@ -111,6 +111,22 @@ RSpec.describe Parser do
 
     it 'parses iszero' do
       expect(Parser.parse 'iszero 0').to eq(Term::Iszero.new(Term::Zero))
+    end
+
+    it 'parses built-in functions like applications' do
+      expect(Parser.parse 'succ x y').to eq(
+        Term::Application.new(
+          Term::Succ.new(Term::Var.new('x')),
+          Term::Var.new('y'))
+      )
+    end
+
+    it 'parses built-in functions as arguments' do
+      expect(Parser.parse 'y (succ x)').to eq(
+        Term::Application.new(
+          Term::Var.new('y'),
+          Term::Succ.new(Term::Var.new('x')))
+      )
     end
 
     it 'parses unit' do

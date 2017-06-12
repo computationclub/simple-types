@@ -30,7 +30,7 @@ module Parser
     end
 
     def term_app(t, a, b, el)
-      args = el[1].map(&:app_operand)
+      args = el[1].map(&:atom)
       args.inject(el[0]) { |x, y| Term::Application.new(x, y) }
     end
 
@@ -91,13 +91,13 @@ module Parser
     end
 
     def term_tuple(t, a, b, el)
-      terms = [el[2]] + el[4].map(&:term_expr)
+      terms = [el[2]] + el[4].map(&:control)
       Term::Tuple.new(terms)
     end
 
     def term_record(t, a, b, el)
       pairs = [el[1]] + el[2].map(&:record_pair)
-      pairs = pairs.map { |pair| [pair.label.text, pair.term_expr] }
+      pairs = pairs.map { |pair| [pair.label.text, pair.control] }
       Term::Record.new(Hash[pairs])
     end
 
@@ -178,19 +178,19 @@ module Parser
     end
 
     def type_tuple(t, a, b, el)
-      types = [el[2]] + el[4].map(&:type_expr)
+      types = [el[2]] + el[4].map(&:type)
       Type::Tuple.new(types)
     end
 
     def type_record(t, a, b, el)
       pairs = [el[1]] + el[2].map(&:rt_pair)
-      pairs = pairs.map { |pair| [pair.label.text, pair.type_expr] }
+      pairs = pairs.map { |pair| [pair.label.text, pair.type] }
       Type::Record.new(Hash[pairs])
     end
 
     def type_variant(t, a, b, el)
       pairs = [el[1]] + el[2].map(&:rt_pair)
-      pairs = pairs.map { |pair| [pair.label.text, pair.type_expr] }
+      pairs = pairs.map { |pair| [pair.label.text, pair.type] }
       Type::Variant.new(Hash[pairs])
     end
 

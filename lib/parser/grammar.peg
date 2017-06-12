@@ -1,6 +1,8 @@
 grammar Parser.Grammar
 
-expression        <-  _* (statement / type_expr) _*               %term_expression
+expression        <-  _* (statement / type) _*               %term_expression
+
+# ==============================================================================
 
 lambda            <-  "λ" / "\\"
 arrow             <-  "→" / "->"
@@ -8,123 +10,136 @@ darrow            <-  "⇒" / "=>"
 times             <-  "×" / "*"
 _                 <-  [ \n\r\t]
 
-statement         <-  sequence
-                   /  term_expr
+# ==============================================================================
 
-term_expr         <-  ascribed_term
+statement         <-  sequence
+                   /  control
+
+control           <-  abstraction
+                   /  if_expr
+                   /  let_binding
+                   /  sum_case
+                   /  var_case
+                   /  term
+
+term              <-  ascribed_term
                    /  ascribable
 
 ascribable        <-  application
-                   /  app_operand
+                   /  app_base
 
-app_operand       <-  projection
-                   /  proj_base
+app_base          <-  builtin_fn
+                   /  atom
 
-proj_base         <-  paren_expr
-                   /  abstraction
-                   /  variable
-                   /  boolean_expr
-                   /  numeric_expr
-                   /  unit_expr
-                   /  let_binding
-                   /  pair_expr
-                   /  tuple_expr
-                   /  record_expr
-                   /  case_expr
-                   /  list_expr
-
-paren_expr        <-  "(" _* statement _* ")"                     %paren_term
-
-sequence          <-  term_expr _* ";" _* statement               %term_seq
-
-ascribed_term     <-  ascribable _+ "as" _+ type_expr             %term_ascribe
-
-                   /  "<" _* label _* "=" _* term_expr _* ">"
-                      _+ "as" _+ type_expr                        %term_tagged
-
-application       <-  app_operand (_+ app_operand)+               %term_app
-
-abstraction       <-  lambda _* variable _* ":" _* type_expr
-                      _* "." _* term_expr                         %term_abs
-
-variable          <-  [a-z] ![a-z]                                %term_var
-
-boolean_expr      <-  true_expr
-                   /  false_expr
-                   /  if_expr
-
-true_expr         <-  "true"                                      %term_true
-false_expr        <-  "false"                                     %term_false
-if_expr           <-  "if" _+ term_expr _+ "then" _+
-                      term_expr _+ "else" _+ term_expr            %term_if
-
-numeric_expr      <-  zero
-                   /  succ_expr
+builtin_fn        <-  succ_expr
                    /  pred_expr
                    /  iszero_expr
-
-zero              <-  "0"                                         %term_zero
-succ_expr         <-  "succ" _+ app_operand                       %term_succ
-pred_expr         <-  "pred" _+ app_operand                       %term_pred
-iszero_expr       <-  "iszero" _+ app_operand                     %term_iszero
-
-unit_expr         <-  "unit"                                      %term_unit
-
-let_binding       <-  "let" _+ variable _* "=" _*
-                      term_expr _+ "in" _+ term_expr              %term_let
-
-projection        <-  proj_base (_* "." _* proj_field)+           %term_project
-proj_field        <-  label / [1-9] [0-9]*
-
-pair_expr         <-  "{" _* term_expr _* "|" _*
-                      term_expr _* "}"                            %term_pair
-
-tuple_expr        <-  "{" _* term_expr _*
-                      ("," _* term_expr _*)+ "}"                  %term_tuple
-
-record_expr       <-  "{" record_pair ("," record_pair)* "}"      %term_record
-record_pair       <-  _* label _* "=" _* term_expr _*
-label             <-  [A-Za-z0-9_-]+
-
-case_expr         <-  inject_expr
-                   /  sum_case
-                   /  var_case
-
-inject_expr       <-  ("inl" / "inr") _+ ascribable               %term_inject
-
-sum_case          <-  "case" _+ term_expr _+ "of" _+
-                      "inl" _+ sum_clause _* "|" _*
-                      "inr" _+ sum_clause                         %term_sum_case
-
-sum_clause        <-  variable _* darrow _* term_expr             %term_sum_clause
-
-var_case          <-  "case" _+ term_expr _+ "of" _+
-                      var_clause (_* "|" _* var_clause)*          %term_var_case
-
-var_clause        <-  "<" _* label _* "=" _* variable _* ">"
-                      _* darrow _* term_expr                      %term_var_clause
-
-list_expr         <-  nil_expr
+                   /  nil_expr
                    /  cons_expr
                    /  isnil_expr
                    /  head_expr
                    /  tail_expr
 
-nil_expr          <-  "nil" _* "[" _* type_expr _* "]"            %term_nil
+atom              <-  projection
+                   /  proj_base
 
-cons_expr         <-  "cons" _* "[" _* type_expr _* "]" _*
-                      app_operand _+ app_operand                  %term_cons
+proj_base         <-  paren_expr
+                   /  true_expr
+                   /  false_expr
+                   /  zero_expr
+                   /  unit_expr
+                   /  inject_expr
+                   /  variable
+                   /  pair_expr
+                   /  tuple_expr
+                   /  record_expr
 
-isnil_expr        <-  "isnil" _* "[" _* type_expr _* "]" _*
-                      app_operand                                 %term_isnil
+# ==============================================================================
 
-head_expr         <-  "head" _* "[" _* type_expr _* "]" _*
-                      app_operand                                 %term_head
+paren_expr        <-  "(" _* statement _* ")"                     %paren_term
 
-tail_expr         <-  "tail" _* "[" _* type_expr _* "]" _*
-                      app_operand                                 %term_tail
+sequence          <-  control _* ";" _* statement                 %term_seq
 
-type_expr         <-  function_type
+ascribed_term     <-  ascribable _+ "as" _+ type                  %term_ascribe
+
+                   /  "<" _* label _* "=" _* control _* ">"
+                      _+ "as" _+ type                             %term_tagged
+
+# ==============================================================================
+
+application       <-  app_base (_+ atom)+                         %term_app
+
+abstraction       <-  lambda _* variable _* ":" _* type
+                      _* "." _* control                           %term_abs
+
+variable          <-  [a-z] ![a-z]                                %term_var
+
+# ==============================================================================
+
+true_expr         <-  "true"                                      %term_true
+false_expr        <-  "false"                                     %term_false
+if_expr           <-  "if" _+ term _+ "then" _+
+                      term _+ "else" _+ term                      %term_if
+
+# ==============================================================================
+
+zero_expr         <-  "0"                                         %term_zero
+succ_expr         <-  "succ" _+ atom                              %term_succ
+pred_expr         <-  "pred" _+ atom                              %term_pred
+iszero_expr       <-  "iszero" _+ atom                            %term_iszero
+
+# ==============================================================================
+
+unit_expr         <-  "unit"                                      %term_unit
+
+# ==============================================================================
+
+let_binding       <-  "let" _+ variable _* "=" _*
+                      term _+ "in" _+ term                        %term_let
+
+# ==============================================================================
+
+projection        <-  proj_base (_* "." _* proj_field)+           %term_project
+proj_field        <-  label / [1-9] [0-9]*
+
+pair_expr         <-  "{" _* control _* "|" _* control _* "}"     %term_pair
+
+tuple_expr        <-  "{" _* control _* ("," _* control _*)+ "}"  %term_tuple
+
+record_expr       <-  "{" record_pair ("," record_pair)* "}"      %term_record
+record_pair       <-  _* label _* "=" _* control _*
+label             <-  [A-Za-z0-9_-]+
+
+# ==============================================================================
+
+inject_expr       <-  ("inl" / "inr") _+ ascribable               %term_inject
+
+sum_case          <-  "case" _+ term _+ "of" _+
+                      "inl" _+ sum_clause _* "|" _*
+                      "inr" _+ sum_clause                         %term_sum_case
+
+sum_clause        <-  variable _* darrow _* term                  %term_sum_clause
+
+var_case          <-  "case" _+ term _+ "of" _+
+                      var_clause (_* "|" _* var_clause)*          %term_var_case
+
+var_clause        <-  "<" _* label _* "=" _* variable _* ">"
+                      _* darrow _* term                           %term_var_clause
+
+# ==============================================================================
+
+nil_expr          <-  "nil" _* "[" _* type _* "]"                 %term_nil
+
+cons_expr         <-  "cons" _* "[" _* type _* "]" _*
+                      atom _+ atom                                %term_cons
+
+isnil_expr        <-  "isnil" _* "[" _* type _* "]" _* atom       %term_isnil
+head_expr         <-  "head" _* "[" _* type _* "]" _* atom        %term_head
+tail_expr         <-  "tail" _* "[" _* type _* "]" _* atom        %term_tail
+
+# ==============================================================================
+
+type              <-  function_type
                    /  func_operand
 
 func_operand      <-  sum_type
@@ -143,9 +158,11 @@ product_part      <-  paren_type
                    /  record_type
                    /  variant_type
 
-paren_type        <-  "(" _* type_expr _* ")"                     %paren_term
+# ==============================================================================
 
-function_type     <-  func_operand _* arrow _* type_expr          %type_func
+paren_type        <-  "(" _* type _* ")"                          %paren_term
+
+function_type     <-  func_operand _* arrow _* type               %type_func
 
 sum_type          <-  sum_part _* "+" _* func_operand             %type_sum
 
@@ -161,10 +178,9 @@ list_type         <-  "List" _+ product_part                      %type_list
 
 base_type         <-  [A-Z] [A-Za-z]*                             %type_base
 
-tuple_type        <-  "{" _* type_expr _*
-                      ("," _* type_expr _*)+ "}"                  %type_tuple
+tuple_type        <-  "{" _* type _* ("," _* type _*)+ "}"        %type_tuple
 
 record_type       <-  "{" rt_pair ("," rt_pair)* "}"              %type_record
-rt_pair           <-  _* label _* ":" _* type_expr _*
+rt_pair           <-  _* label _* ":" _* type _*
 
 variant_type      <-  "<" rt_pair ("," rt_pair)* ">"              %type_variant
