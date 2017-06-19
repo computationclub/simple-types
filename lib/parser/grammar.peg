@@ -117,13 +117,13 @@ label             <-  [A-Za-z0-9_-]+
 
 inject_term       <-  ("inl" / "inr") _+ ascribable               %term_inject
 
-sum_case          <-  "case" _+ term _+ "of" _+
+sum_case          <-  "case" _+ control _+ "of" _+
                       "inl" _+ sum_clause _* "|" _*
                       "inr" _+ sum_clause                         %term_sum_case
 
 sum_clause        <-  parameter _* darrow _* control              %term_sum_clause
 
-var_case          <-  "case" _+ term _+ "of" _+
+var_case          <-  "case" _+ control _+ "of" _+
                       var_clause (_* "|" _* var_clause)*          %term_var_case
 
 var_clause        <-  "<" _* label _* "=" _* parameter _* ">"
