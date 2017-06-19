@@ -12,7 +12,7 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses an abstraction with a wildcard', :pending do
+    it 'parses an abstraction with a wildcard' do
       expect(Parser.parse 'λ_:Bool. x').to eq(
         Term::Abs.new('_', Type::Boolean, Term::Var.new('x'))
       )
