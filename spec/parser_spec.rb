@@ -12,6 +12,12 @@ RSpec.describe Parser do
       )
     end
 
+    it 'parses an abstraction with a wildcard', :pending do
+      expect(Parser.parse 'λ_:Bool. x').to eq(
+        Term::Abs.new('_', Type::Boolean, Term::Var.new('x'))
+      )
+    end
+
     it 'parses a 2-term application' do
       expect(Parser.parse('x y')).to eq(
         Term::Application.new(Term::Var.new('x'), Term::Var.new('y'))
@@ -59,6 +65,14 @@ RSpec.describe Parser do
 
     it 'parses an application taking an abstraction' do
       expect(Parser.parse 'x (λy:Bool. y)').to eq(
+        Term::Application.new(
+          Term::Var.new('x'),
+          Term::Abs.new('y', Type::Boolean, Term::Var.new('y')))
+      )
+    end
+
+    it 'parses an application taking an abstraction without brackets', :pending do
+      expect(Parser.parse 'x λy:Bool. y').to eq(
         Term::Application.new(
           Term::Var.new('x'),
           Term::Abs.new('y', Type::Boolean, Term::Var.new('y')))
@@ -193,6 +207,22 @@ RSpec.describe Parser do
       )
     end
 
+    it 'parses a let-binding containing an abstraction' do
+      expect(Parser.parse 'let x = (λy:Bool. y) in x').to eq(
+        Term::Let.new('x',
+                      Term::Abs.new('y', Type::Boolean, Term::Var.new('y')),
+                      Term::Var.new('x'))
+      )
+    end
+
+    it 'parses a let-binding containing an abstraction without brackets', :pending do
+      expect(Parser.parse 'let x = λy:Bool. y in x').to eq(
+        Term::Let.new('x',
+                      Term::Abs.new('y', Type::Boolean, Term::Var.new('y')),
+                      Term::Var.new('x'))
+      )
+    end
+
     it 'parses a pair' do
       expect(Parser.parse '{x y | z}').to eq(
         Term::Pair.new(
@@ -301,6 +331,24 @@ RSpec.describe Parser do
       )
     end
 
+    it 'parses a sum case expression containing an abstraction' do
+      expect(Parser.parse 'case x of inl a ⇒ true | inr b ⇒ (λx:Bool. x)').to eq(
+        Term::SumCase.new(
+          Term::Var.new('x'),
+          Term::CaseClause.new('a', Term::True),
+          Term::CaseClause.new('b', Term::Abs.new('x', Type::Boolean, Term::Var.new('x'))))
+      )
+    end
+
+    it 'parses a sum case expression containing an abstraction without brackets', :pending do
+      expect(Parser.parse 'case x of inl a ⇒ true | inr b ⇒ λx:Bool. x').to eq(
+        Term::SumCase.new(
+          Term::Var.new('x'),
+          Term::CaseClause.new('a', Term::True),
+          Term::CaseClause.new('b', Term::Abs.new('x', Type::Boolean, Term::Var.new('x'))))
+      )
+    end
+
     it 'parses a tagged term' do
       expect(Parser.parse '<foo=true> as Bool').to eq(
         Term::Tagged.new('foo', Term::True, Type::Boolean)
@@ -327,9 +375,45 @@ RSpec.describe Parser do
       )
     end
 
+    it 'parses nested cons' do
+      expect(Parser.parse 'cons[Bool] x (cons[Bool] y (nil[Bool]))').to eq(
+        Term::Cons.new(
+          Type::Boolean,
+          Term::Var.new('x'),
+          Term::Cons.new(
+            Type::Boolean,
+            Term::Var.new('y'),
+            Term::Nil.new(Type::Boolean)))
+      )
+    end
+
+    it 'parses nested cons without brackets', :pending do
+      expect(Parser.parse 'cons[Bool] x cons[Bool] y nil[Bool]').to eq(
+        Term::Cons.new(
+          Type::Boolean,
+          Term::Var.new('x'),
+          Term::Cons.new(
+            Type::Boolean,
+            Term::Var.new('y'),
+            Term::Nil.new(Type::Boolean)))
+      )
+    end
+
     it 'parses isnil' do
       expect(Parser.parse 'isnil[Bool] x').to eq(
         Term::Isnil.new(Type::Boolean, Term::Var.new('x'))
+      )
+    end
+
+    it 'parses isnil of nil' do
+      expect(Parser.parse 'isnil[Bool] (nil[Bool])').to eq(
+        Term::Isnil.new(Type::Boolean, Term::Nil.new(Type::Boolean))
+      )
+    end
+
+    it 'parses isnil of nil without brackets', :pending do
+      expect(Parser.parse 'isnil[Bool] nil[Bool]').to eq(
+        Term::Isnil.new(Type::Boolean, Term::Nil.new(Type::Boolean))
       )
     end
 
