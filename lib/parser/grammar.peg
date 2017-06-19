@@ -35,7 +35,6 @@ builtin_fn        <-  succ_term
                    /  pred_term
                    /  iszero_term
                    /  inject_term
-                   /  nil_term
                    /  cons_term
                    /  isnil_term
                    /  head_term
@@ -53,6 +52,7 @@ proj_base         <-  paren_term
                    /  pair_term
                    /  tuple_term
                    /  record_term
+                   /  nil_term
 
 # ==============================================================================
 

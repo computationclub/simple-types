@@ -411,7 +411,7 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses isnil of nil without brackets', :pending do
+    it 'parses isnil of nil without brackets' do
       expect(Parser.parse 'isnil[Bool] nil[Bool]').to eq(
         Term::Isnil.new(Type::Boolean, Term::Nil.new(Type::Boolean))
       )
