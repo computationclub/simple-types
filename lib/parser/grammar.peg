@@ -81,8 +81,8 @@ variable          <-  [a-z] ![a-z]                                %term_var
 
 true_term         <-  "true"                                      %term_true
 false_term        <-  "false"                                     %term_false
-if_term           <-  "if" _+ term _+ "then" _+
-                      term _+ "else" _+ term                      %term_if
+if_term           <-  "if" _+ control _+ "then" _+
+                      control _+ "else" _+ control                %term_if
 
 # ==============================================================================
 
@@ -98,7 +98,7 @@ unit_term         <-  "unit"                                      %term_unit
 # ==============================================================================
 
 let_binding       <-  "let" _+ parameter _* "=" _*
-                      term _+ "in" _+ term                        %term_let
+                      control _+ "in" _+ control                  %term_let
 
 # ==============================================================================
 
@@ -121,13 +121,13 @@ sum_case          <-  "case" _+ term _+ "of" _+
                       "inl" _+ sum_clause _* "|" _*
                       "inr" _+ sum_clause                         %term_sum_case
 
-sum_clause        <-  parameter _* darrow _* term                 %term_sum_clause
+sum_clause        <-  parameter _* darrow _* control              %term_sum_clause
 
 var_case          <-  "case" _+ term _+ "of" _+
                       var_clause (_* "|" _* var_clause)*          %term_var_case
 
 var_clause        <-  "<" _* label _* "=" _* parameter _* ">"
-                      _* darrow _* term                           %term_var_clause
+                      _* darrow _* control                        %term_var_clause
 
 # ==============================================================================
 

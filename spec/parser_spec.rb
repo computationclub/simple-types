@@ -215,7 +215,7 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses a let-binding containing an abstraction without brackets', :pending do
+    it 'parses a let-binding containing an abstraction without brackets' do
       expect(Parser.parse 'let x = λy:Bool. y in x').to eq(
         Term::Let.new('x',
                       Term::Abs.new('y', Type::Boolean, Term::Var.new('y')),
@@ -340,7 +340,7 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses a sum case expression containing an abstraction without brackets', :pending do
+    it 'parses a sum case expression containing an abstraction without brackets' do
       expect(Parser.parse 'case x of inl a ⇒ true | inr b ⇒ λx:Bool. x').to eq(
         Term::SumCase.new(
           Term::Var.new('x'),
