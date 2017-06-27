@@ -114,6 +114,18 @@ RSpec.describe 'type_of' do
     expect { type_of(expr 'inr true as Bool') }.to raise_error(TypeError)
   end
 
+  specify do
+    expect(type_of(expr 'case inl true as Bool + (Bool × Bool) of inl b => b | inr p => p.1')).to eq(expr 'Bool')
+  end
+
+  specify do
+    expect { type_of(expr 'case true of inl b => b | inr p => p.1') }.to raise_error(TypeError)
+  end
+
+  specify do
+    expect { type_of(expr 'case inl true as Bool + (Bool × Bool) of inl b => b | inr p => p') }.to raise_error(TypeError)
+  end
+
   def expr(text)
     Parser.parse(text)
   end

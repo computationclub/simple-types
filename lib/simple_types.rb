@@ -61,5 +61,15 @@ def type_of(term, context = {})
     raise TypeError, 'inr term must match right side of Sum type' unless term_type == sum_type.right
 
     sum_type
+  when Term::SumCase
+    sum_type = type_of(term.term, context)
+    raise TypeError, 'the term of a Sum case must be a Sum type' unless sum_type.is_a?(Type::Sum)
+
+    left_type = type_of(term.left.body, context.merge(term.left.param => sum_type.left))
+    right_type = type_of(term.right.body, context.merge(term.right.param => sum_type.right))
+
+    raise TypeError, 'the two arms must match' unless left_type == right_type
+
+    left_type
   end
 end
