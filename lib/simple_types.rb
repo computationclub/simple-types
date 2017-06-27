@@ -33,5 +33,17 @@ def type_of(term, context = {})
     right_type = type_of(term.right, context)
 
     Type::Product.new(left_type, right_type)
+  when Term::Project
+    object_type = type_of(term.object, context)
+    raise TypeError, 'not a pair' unless object_type.is_a?(Type::Product)
+
+    case term.field
+    when 1
+      object_type.left
+    when 2
+      object_type.right
+    else
+      raise TypeError, 'out of bounds'
+    end
   end
 end
