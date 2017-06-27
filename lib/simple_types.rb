@@ -28,5 +28,10 @@ def type_of(term, context = {})
     raise TypeError, '💩 argument' unless left_type.from == type_of(term.right, context)
 
     left_type.to
+  when Term::Pair
+    left_type = type_of(term.left, context)
+    right_type = type_of(term.right, context)
+
+    Type::Product.new(left_type, right_type)
   end
 end

@@ -66,6 +66,14 @@ RSpec.describe 'type_of' do
     expect { type_of(expr '(λx:Bool. true) (λx:Bool. true)') }.to raise_error(TypeError, /💩 argument/)
   end
 
+  specify do
+    expect(type_of(expr '{ true | true }')).to eq(expr 'Bool × Bool')
+  end
+
+  specify do
+    expect(type_of(expr '{ true | { if true then false else true | false } }')).to eq(expr 'Bool × Bool × Bool')
+  end
+
   def expr(text)
     Parser.parse(text)
   end
