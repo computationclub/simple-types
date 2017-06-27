@@ -45,5 +45,21 @@ def type_of(term, context = {})
     else
       raise TypeError, 'out of bounds'
     end
+  when Term::Inl
+    sum_type = term.type
+    raise TypeError, 'inl ascription must contains Sum type' unless sum_type.is_a?(Type::Sum)
+
+    term_type = type_of(term.term, context)
+    raise TypeError, 'inl term must match left side of Sum type' unless term_type == sum_type.left
+
+    sum_type
+  when Term::Inr
+    sum_type = term.type
+    raise TypeError, 'inr ascription must contains Sum type' unless sum_type.is_a?(Type::Sum)
+
+    term_type = type_of(term.term, context)
+    raise TypeError, 'inr term must match right side of Sum type' unless term_type == sum_type.right
+
+    sum_type
   end
 end

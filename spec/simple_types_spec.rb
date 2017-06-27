@@ -90,6 +90,30 @@ RSpec.describe 'type_of' do
     expect { type_of(expr '{ true | false }.3') }.to raise_error(TypeError)
   end
 
+  specify do
+    expect(type_of(expr 'inl true as Bool + (Bool × Bool)')).to eq(expr 'Bool + (Bool × Bool)')
+  end
+
+  specify do
+    expect { type_of(expr 'inl { true | false } as Bool + (Bool × Bool)') }.to raise_error(TypeError)
+  end
+
+  specify do
+    expect { type_of(expr 'inl true as Bool') }.to raise_error(TypeError)
+  end
+
+  specify do
+    expect(type_of(expr 'inr true as (Bool × Bool) + Bool')).to eq(expr '(Bool × Bool) + Bool')
+  end
+
+  specify do
+    expect { type_of(expr 'inr { true | false } as (Bool × Bool) + Bool') }.to raise_error(TypeError)
+  end
+
+  specify do
+    expect { type_of(expr 'inr true as Bool') }.to raise_error(TypeError)
+  end
+
   def expr(text)
     Parser.parse(text)
   end
