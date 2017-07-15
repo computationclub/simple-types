@@ -145,6 +145,18 @@ module Parser
       Term::Tail.new(el[4], el[8])
     end
 
+    def term_ref(t, a, b, el)
+      Term::Ref.new(el[2])
+    end
+
+    def term_deref(t, a, b, el)
+      Term::Deref.new(el[2])
+    end
+
+    def term_assign(t, a, b, el)
+      Term::Assign.new(el[0], el[4])
+    end
+
     def type_func(t, a, b, el)
       Type::Function.new(el[0], el[4])
     end
@@ -192,6 +204,10 @@ module Parser
       pairs = [el[1]] + el[2].map(&:rt_pair)
       pairs = pairs.map { |pair| [pair.label.text, pair.type] }
       Type::Variant.new(Hash[pairs])
+    end
+
+    def type_ref(t, a, b, el)
+      Type::Ref.new(el[2])
     end
 
   end

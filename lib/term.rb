@@ -247,4 +247,28 @@ module Term
       "tail[#{type.inspect}] #{arg.atomic}"
     end
   end
+
+  Ref = Struct.new(:value) do
+    include Compound
+
+    def inspect
+      "ref #{value.atomic}"
+    end
+  end
+
+  Deref = Struct.new(:ref) do
+    include Compound
+
+    def inspect
+      "!#{ref.atomic}"
+    end
+  end
+
+  Assign = Struct.new(:ref, :value) do
+    include Compound
+
+    def inspect
+      "#{ref.inspect} := #{value.inspect}"
+    end
+  end
 end

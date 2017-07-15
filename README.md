@@ -146,3 +146,12 @@ In these terms, `clause` means `Term::CaseClause(param: string, body: term)`
 | `head[T] t`   | `Term::Head(type: type, arg: term)`              |
 | `tail[T] t`   | `Term::Tail(type: type, arg: term)`              |
 | `List T`      | `Type::List(type: type)`                         |
+
+### References
+
+| Syntax   | Node                                   |
+| -------- | -------------------------------------- |
+| `ref t`  | `Term::Ref(value: term)`               |
+| `!t`     | `Term::Deref(ref: term)`               |
+| `t := t` | `Term::Assign(ref: term, value: term)` |
+| `Ref T`  | `Type::Ref(type: type)`                |

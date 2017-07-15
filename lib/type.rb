@@ -91,4 +91,12 @@ module Type
       "List #{type.atomic}"
     end
   end
+
+  Ref = Struct.new(:type) do
+    include Term::Compound
+
+    def inspect
+      "Ref #{type.atomic}"
+    end
+  end
 end

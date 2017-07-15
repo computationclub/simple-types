@@ -20,6 +20,7 @@ control           <-  abstraction
                    /  let_binding
                    /  sum_case
                    /  var_case
+                   /  assignment
                    /  term
 
 term              <-  ascribed_term
@@ -40,8 +41,10 @@ builtin_fn        <-  succ_term
                    /  isnil_term
                    /  head_term
                    /  tail_term
+                   /  ref_term
 
-atom              <-  projection
+atom              <-  dereference
+                   /  projection
                    /  proj_base
 
 proj_base         <-  paren_term
@@ -141,6 +144,12 @@ tail_term         <-  "tail" _* "[" _* type _* "]" _* atom        %term_tail
 
 # ==============================================================================
 
+ref_term          <-  "ref" _+ atom                               %term_ref
+dereference       <-  "!" _* atom                                 %term_deref
+assignment        <-  variable _* ":=" _* control                 %term_assign
+
+# ==============================================================================
+
 type              <-  function_type
                    /  func_operand
 
@@ -155,6 +164,7 @@ product_part      <-  paren_type
                    /  numeric_type
                    /  unit_type
                    /  list_type
+                   /  ref_type
                    /  base_type
                    /  tuple_type
                    /  record_type
@@ -177,6 +187,8 @@ numeric_type      <-  "Nat" ![A-Za-z]                             %type_nat
 unit_type         <-  "Unit" ![A-Za-z]                            %type_unit
 
 list_type         <-  "List" _+ product_part                      %type_list
+
+ref_type          <-  "Ref" _+ product_part                       %type_ref
 
 base_type         <-  [A-Z] [A-Za-z]*                             %type_base
 

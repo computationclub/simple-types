@@ -344,6 +344,50 @@ RSpec.describe Parser do
         Term::Tail.new(Type::Boolean, Term::Var.new('x'))
       )
     end
+
+    it 'parses ref' do
+      expect(Parser.parse 'ref 0').to eq(Term::Ref.new(Term::Zero))
+    end
+
+    it 'parses deref' do
+      expect(Parser.parse '!r').to eq(Term::Deref.new(Term::Var.new('r')))
+    end
+
+    it 'parses deref as higher precedence than application' do
+      expect(Parser.parse '!r s').to eq(
+        Term::Application.new(
+          Term::Deref.new(Term::Var.new('r')),
+          Term::Var.new('s'))
+      )
+    end
+
+    it 'parses deref as lower precedence than projection' do
+      expect(Parser.parse '!r.s').to eq(
+        Term::Deref.new(Term::Project.new(Term::Var.new('r'), 's'))
+      )
+    end
+
+    it 'parses assignment' do
+      expect(Parser.parse 'r := x y').to eq(
+        Term::Assign.new(
+          Term::Var.new('r'),
+          Term::Application.new(Term::Var.new('x'), Term::Var.new('y')))
+      )
+    end
+
+    it 'parses a sequence of ref terms' do
+      assign = Term::Assign.new(
+                 Term::Var.new('r'),
+                 Term::Succ.new(Term::Deref.new(Term::Var.new('r'))))
+
+      expect(Parser.parse 'r := succ !r ; r := succ !r ; !r').to eq(
+        Term::Sequence.new(
+          assign,
+          Term::Sequence.new(
+            assign,
+            Term::Deref.new(Term::Var.new('r'))))
+      )
+    end
   end
 
   describe 'types' do
@@ -468,6 +512,10 @@ RSpec.describe Parser do
           Type::List.new(Type::Natural),
           Type::Boolean)
       )
+    end
+
+    it 'parses the ref type' do
+      expect(Parser.parse 'Ref Nat').to eq(Type::Ref.new(Type::Natural))
     end
   end
 end
