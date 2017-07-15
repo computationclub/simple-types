@@ -170,11 +170,11 @@ sum_type          <-  sum_part _* "+" _* func_operand             %type_sum
 
 product_type      <-  product_part _* times _* sum_part           %type_pair
 
-boolean_type      <-  "Bool"                                      %type_bool
+boolean_type      <-  "Bool" ![A-Za-z]                            %type_bool
 
-numeric_type      <-  "Nat"                                       %type_nat
+numeric_type      <-  "Nat" ![A-Za-z]                             %type_nat
 
-unit_type         <-  "Unit"                                      %type_unit
+unit_type         <-  "Unit" ![A-Za-z]                            %type_unit
 
 list_type         <-  "List" _+ product_part                      %type_list
 
