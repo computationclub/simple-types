@@ -193,6 +193,8 @@ module Term
   end
 
   CaseClause = Struct.new(:param, :body) do
+    include Atom
+
     def inspect
       "#{param} ⇒ #{body.atomic}"
     end
