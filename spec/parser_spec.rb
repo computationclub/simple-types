@@ -388,6 +388,14 @@ RSpec.describe Parser do
             Term::Deref.new(Term::Var.new('r'))))
       )
     end
+
+    it 'parses an assignment to a non-variable' do
+      expect(Parser.parse 'r.foo := 0').to eq(
+        Term::Assign.new(
+          Term::Project.new(Term::Var.new('r'), 'foo'),
+          Term::Zero)
+      )
+    end
   end
 
   describe 'types' do

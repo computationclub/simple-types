@@ -146,7 +146,7 @@ tail_term         <-  "tail" _* "[" _* type _* "]" _* atom        %term_tail
 
 ref_term          <-  "ref" _+ atom                               %term_ref
 dereference       <-  "!" _* atom                                 %term_deref
-assignment        <-  variable _* ":=" _* control                 %term_assign
+assignment        <-  term _* ":=" _* control                     %term_assign
 
 # ==============================================================================
 
