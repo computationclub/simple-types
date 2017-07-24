@@ -147,11 +147,12 @@ RSpec.describe Parser do
       )
     end
 
-    it 'parses sequencing with lower precedence than abstraction' do
+    it 'parses sequencing with higher precedence than abstraction' do
       expect(Parser.parse 'λx:Bool. x ; y').to eq(
-        Term::Sequence.new(
-          Term::Abs.new('x', Type::Boolean, Term::Var.new('x')),
-          Term::Var.new('y'))
+        Term::Abs.new('x', Type::Boolean,
+          Term::Sequence.new(
+            Term::Var.new('x'),
+            Term::Var.new('y')))
       )
     end
 

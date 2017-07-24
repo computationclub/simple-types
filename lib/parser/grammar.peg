@@ -73,7 +73,7 @@ ascribed_term     <-  ascribable _+ "as" _+ type                  %term_ascribe
 application       <-  app_base (_+ atom)+                         %term_app
 
 abstraction       <-  lambda _* parameter _* ":" _* type
-                      _* "." _* control                           %term_abs
+                      _* "." _* statement                         %term_abs
 
 parameter         <-  variable / "_" %term_var
 
