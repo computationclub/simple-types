@@ -28,57 +28,13 @@ def type_of(term, context = {})
     raise TypeError, '💩 argument' unless left_type.from == type_of(term.right, context)
 
     left_type.to
-  when Term::Pair
-    left_type = type_of(term.left, context)
-    right_type = type_of(term.right, context)
-
-    Type::Product.new(left_type, right_type)
   when Term::Record
     Type::Record.new(term.members.map { |label, member| [label, type_of(member, context)] }.to_h)
   when Term::Project
     object_type = type_of(term.object, context)
-    raise TypeError, 'not a pair or record' unless object_type.is_a?(Type::Product) || object_type.is_a?(Type::Record)
+    raise TypeError, 'not a record' unless object_type.is_a?(Type::Record)
+    raise TypeError, "unknown field #{term.field}" unless object_type.members.key?(term.field)
 
-    case object_type
-    when Type::Product
-      case term.field
-      when 1
-        object_type.left
-      when 2
-        object_type.right
-      else
-        raise TypeError, 'out of bounds'
-      end
-    when Type::Record
-      raise TypeError, "unknown field #{term.field}" unless object_type.members.key?(term.field)
-
-      object_type.members.fetch(term.field)
-    end
-  when Term::Inl
-    sum_type = term.type
-    raise TypeError, 'inl ascription must contains Sum type' unless sum_type.is_a?(Type::Sum)
-
-    term_type = type_of(term.term, context)
-    raise TypeError, 'inl term must match left side of Sum type' unless term_type == sum_type.left
-
-    sum_type
-  when Term::Inr
-    sum_type = term.type
-    raise TypeError, 'inr ascription must contains Sum type' unless sum_type.is_a?(Type::Sum)
-
-    term_type = type_of(term.term, context)
-    raise TypeError, 'inr term must match right side of Sum type' unless term_type == sum_type.right
-
-    sum_type
-  when Term::SumCase
-    sum_type = type_of(term.term, context)
-    raise TypeError, 'the term of a Sum case must be a Sum type' unless sum_type.is_a?(Type::Sum)
-
-    left_type = type_of(term.left.body, context.merge(term.left.param => sum_type.left))
-    right_type = type_of(term.right.body, context.merge(term.right.param => sum_type.right))
-
-    raise TypeError, 'the two arms must match' unless left_type == right_type
-
-    left_type
+    object_type.members.fetch(term.field)
   end
 end

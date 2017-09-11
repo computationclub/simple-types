@@ -67,22 +67,6 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect(type_of(expr '{ true | true }')).to eq(expr 'Bool × Bool')
-  end
-
-  specify do
-    expect(type_of(expr '{ true | { if true then false else true | false } }')).to eq(expr 'Bool × Bool × Bool')
-  end
-
-  specify do
-    expect(type_of(expr '{ true | (λx:Bool. true) }.1')).to eq(expr 'Bool')
-  end
-
-  specify do
-    expect(type_of(expr '{ true | (λx:Bool. true) }.2')).to eq(expr 'Bool → Bool')
-  end
-
-  specify do
     expect(type_of(expr '{foo=true, bar=λx:Bool. true}')).to eq(expr '{foo: Bool, bar: Bool → Bool}')
   end
 
@@ -99,47 +83,7 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(expr '{ true | false }.3') }.to raise_error(TypeError)
-  end
-
-  specify do
     expect { type_of(expr '{foo=true, bar=λx:Bool. true}.baz') }.to raise_error(TypeError)
-  end
-
-  specify do
-    expect(type_of(expr 'inl true as Bool + (Bool × Bool)')).to eq(expr 'Bool + (Bool × Bool)')
-  end
-
-  specify do
-    expect { type_of(expr 'inl { true | false } as Bool + (Bool × Bool)') }.to raise_error(TypeError)
-  end
-
-  specify do
-    expect { type_of(expr 'inl true as Bool') }.to raise_error(TypeError)
-  end
-
-  specify do
-    expect(type_of(expr 'inr true as (Bool × Bool) + Bool')).to eq(expr '(Bool × Bool) + Bool')
-  end
-
-  specify do
-    expect { type_of(expr 'inr { true | false } as (Bool × Bool) + Bool') }.to raise_error(TypeError)
-  end
-
-  specify do
-    expect { type_of(expr 'inr true as Bool') }.to raise_error(TypeError)
-  end
-
-  specify do
-    expect(type_of(expr 'case inl true as Bool + (Bool × Bool) of inl b => b | inr p => p.1')).to eq(expr 'Bool')
-  end
-
-  specify do
-    expect { type_of(expr 'case true of inl b => b | inr p => p.1') }.to raise_error(TypeError)
-  end
-
-  specify do
-    expect { type_of(expr 'case inl true as Bool + (Bool × Bool) of inl b => b | inr p => p') }.to raise_error(TypeError)
   end
 
   def expr(text)
