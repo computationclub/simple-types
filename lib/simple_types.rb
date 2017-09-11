@@ -33,17 +33,26 @@ def type_of(term, context = {})
     right_type = type_of(term.right, context)
 
     Type::Product.new(left_type, right_type)
+  when Term::Record
+    Type::Record.new(term.members.map { |label, member| [label, type_of(member, context)] }.to_h)
   when Term::Project
     object_type = type_of(term.object, context)
-    raise TypeError, 'not a pair' unless object_type.is_a?(Type::Product)
+    raise TypeError, 'not a pair or record' unless object_type.is_a?(Type::Product) || object_type.is_a?(Type::Record)
 
-    case term.field
-    when 1
-      object_type.left
-    when 2
-      object_type.right
-    else
-      raise TypeError, 'out of bounds'
+    case object_type
+    when Type::Product
+      case term.field
+      when 1
+        object_type.left
+      when 2
+        object_type.right
+      else
+        raise TypeError, 'out of bounds'
+      end
+    when Type::Record
+      raise TypeError, "unknown field #{term.field}" unless object_type.members.key?(term.field)
+
+      object_type.members.fetch(term.field)
     end
   when Term::Inl
     sum_type = term.type

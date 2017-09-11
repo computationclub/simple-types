@@ -83,11 +83,27 @@ RSpec.describe 'type_of' do
   end
 
   specify do
+    expect(type_of(expr '{foo=true, bar=λx:Bool. true}')).to eq(expr '{foo: Bool, bar: Bool → Bool}')
+  end
+
+  specify do
+    expect(type_of(expr '{foo=true, bar=λx:Bool. true}.foo')).to eq(expr 'Bool')
+  end
+
+  specify do
+    expect(type_of(expr '{foo=true, bar=λx:Bool. true}.bar')).to eq(expr 'Bool → Bool')
+  end
+
+  specify do
     expect { type_of(expr 'true.1') }.to raise_error(TypeError)
   end
 
   specify do
     expect { type_of(expr '{ true | false }.3') }.to raise_error(TypeError)
+  end
+
+  specify do
+    expect { type_of(expr '{foo=true, bar=λx:Bool. true}.baz') }.to raise_error(TypeError)
   end
 
   specify do
