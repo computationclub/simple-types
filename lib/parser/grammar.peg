@@ -163,6 +163,7 @@ product_part      <-  paren_type
                    /  boolean_type
                    /  numeric_type
                    /  unit_type
+                   /  top_type
                    /  list_type
                    /  ref_type
                    /  base_type
@@ -185,6 +186,8 @@ boolean_type      <-  "Bool" ![A-Za-z]                            %type_bool
 numeric_type      <-  "Nat" ![A-Za-z]                             %type_nat
 
 unit_type         <-  "Unit" ![A-Za-z]                            %type_unit
+
+top_type          <-  "Top"  ![A-Za-z]                            %type_top
 
 list_type         <-  "List" _+ product_part                      %type_list
 

@@ -40,6 +40,14 @@ module Type
     end
   end.new
 
+  Top = Class.new do
+    include Term::Atom
+
+    def inspect
+      'Top'
+    end
+  end.new
+
   Product = Struct.new(:left, :right) do
     include Term::Compound
 

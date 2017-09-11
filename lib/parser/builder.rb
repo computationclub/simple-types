@@ -74,6 +74,10 @@ module Parser
       Term::Unit
     end
 
+    def type_top(*)
+      Type::Top
+    end
+
     def term_let(t, a, b, el)
       Term::Let.new(el[2].name, el[6], el[10])
     end

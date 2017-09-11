@@ -448,6 +448,10 @@ RSpec.describe Parser do
       expect(Parser.parse 'Unit').to eq(Type::Unit)
     end
 
+    it 'parses the top type' do
+      expect(Parser.parse 'Top').to eq(Type::Top)
+    end
+
     it 'parses the product type' do
       expect(Parser.parse 'Nat × Bool').to eq(
         Type::Product.new(Type::Natural, Type::Boolean)
