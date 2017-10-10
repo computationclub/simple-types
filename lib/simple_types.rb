@@ -31,6 +31,9 @@ def meet(a, b)
     end
     return Type::Record.new(meet_members)
   end
+  if a.is_a?(Type::Function) && b.is_a?(Type::Function)
+    return Type::Function.new(join(a.from, b.from), meet(a.to, b.to))
+  end
   raise TypeError, "No meet of #{a.inspect} and #{b.inspect}"
 end
 

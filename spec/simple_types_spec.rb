@@ -252,4 +252,22 @@ RSpec.describe 'meet' do
       expect { meet(expr('{x:Bool, y:Bool}'), expr('{x:{a:Bool}, z:Bool}')) }.to raise_error TypeError
     end
   end
+
+  describe 'functions' do
+    specify do
+      expect(meet(expr('Bool -> {x:Bool}'), expr('Bool -> {y:Bool}'))).to eq(expr('Bool -> {x:Bool, y:Bool}'))
+    end
+
+    specify do
+      expect(meet(expr('{x:Bool, y:Bool} -> Bool'), expr('{x:Bool, z:Bool} -> Bool'))).to eq(expr('{x:Bool} -> Bool'))
+    end
+
+    specify do
+      expect { meet(expr('Bool -> Bool'), expr('Bool -> {y:Bool}')) }.to raise_error TypeError
+    end
+
+    specify do
+      expect(meet(expr('{x:Bool, y:Bool} -> Bool'), expr('Bool -> Bool'))).to eq(expr('Top -> Bool'))
+    end
+  end
 end
