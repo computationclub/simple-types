@@ -12,7 +12,12 @@ def join(a, b)
     return Type::Record.new(members)
   end
   if a.is_a?(Type::Function) && b.is_a?(Type::Function)
-    return Type::Function.new(a.from, join(a.to, b.to))
+    begin
+      argument_meet = meet(a.from, b.from)
+    rescue TypeError
+      return Type::Top
+    end
+    return Type::Function.new(argument_meet, join(a.to, b.to))
   end
   Type::Top
 end
