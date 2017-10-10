@@ -20,7 +20,13 @@ end
 def meet(a, b)
   return a if subtype_of?(a, b)
   return b if subtype_of?(b, a)
-  raise TypeError, "No meet of #{a} and #{b}"
+  if a.is_a?(Type::Record) && b.is_a?(Type::Record)
+    meet_members = a.members.merge(b.members) do |_, value_a, value_b|
+      meet(value_a, value_b)
+    end
+    return Type::Record.new(meet_members)
+  end
+  raise TypeError, "No meet of #{a.inspect} and #{b.inspect}"
 end
 
 def subtype_of?(subtype, supertype)
