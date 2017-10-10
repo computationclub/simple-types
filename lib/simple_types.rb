@@ -72,9 +72,8 @@ def type_of(term, context = {})
 
     consequent_type = type_of(term.consequent, context)
     alternate_type = type_of(term.alternate, context)
-    raise TypeError, 'mismatching arms' unless consequent_type == alternate_type
 
-    consequent_type
+    join(consequent_type, alternate_type)
   when Term::Application
     left_type = type_of(term.left, context)
     raise TypeError, 'non-abstraction' unless left_type.is_a?(Type::Function)

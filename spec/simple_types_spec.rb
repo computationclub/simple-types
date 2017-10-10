@@ -128,11 +128,15 @@ RSpec.describe 'type_of' do
   end
 
   specify do
-    expect { type_of(expr 'if true then (λx:Bool. true) else true') }.to raise_error(TypeError, /mismatching arms/)
+    expect(type_of(expr('if true then x else true'), 'x' => expr('Bool'))).to eq(expr 'Bool')
   end
 
   specify do
-    expect(type_of(expr('if true then x else true'), 'x' => expr('Bool'))).to eq(expr 'Bool')
+    expect(type_of(expr('if true then {x=true} else true'), {})).to eq(expr 'Top')
+  end
+
+  specify do
+    expect(type_of(expr('if true then {x=true, y=false} else {x=true, z=false}'))).to eq(expr('{x:Bool}'))
   end
 
   specify do
