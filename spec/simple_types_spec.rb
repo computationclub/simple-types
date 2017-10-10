@@ -49,6 +49,10 @@ RSpec.describe 'subtype_of?' do
     specify do
       expect('{x:{a:Bool}}').not_to be_subtype_of('{x:{a:Bool, b:Bool}}')
     end
+
+    specify do
+      expect('{x:Bool, y:Bool, z:Bool}').to be_subtype_of('{y:Top, x:Top}')
+    end
   end
 
   describe 'SA-ARROW' do
