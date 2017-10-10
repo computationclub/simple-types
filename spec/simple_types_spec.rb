@@ -51,6 +51,28 @@ RSpec.describe 'subtype_of?' do
     end
   end
 
+  describe 'SA-ARROW' do
+    specify do
+      expect('Bool -> Bool').to be_subtype_of('Bool -> Bool')
+    end
+
+    specify do
+      expect('Bool -> Bool').to be_subtype_of('Bool -> Top')
+    end
+
+    specify do
+      expect('Top -> Bool').to be_subtype_of('Bool -> Bool')
+    end
+
+    specify do
+      expect('Bool -> Top').not_to be_subtype_of('Bool -> Bool')
+    end
+
+    specify do
+      expect('Bool -> Bool').not_to be_subtype_of('Top -> Bool')
+    end
+  end
+
   def expr(text)
     Parser.parse(text)
   end

@@ -9,6 +9,12 @@ def subtype_of?(subtype, supertype)
       subtype.members.key?(field) && subtype_of?(subtype.members[field], type)
     end
   end
+  if subtype.is_a?(Type::Function) && supertype.is_a?(Type::Function)
+    return (
+      subtype_of?(supertype.from, subtype.from) &&
+      subtype_of?(subtype.to, supertype.to)
+    )
+  end
   false
 end
 
