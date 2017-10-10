@@ -1,6 +1,31 @@
 require 'simple_types'
 require 'parser'
 
+RSpec.describe 'subtype_of?' do
+
+  RSpec::Matchers.define :be_subtype_of do |right|
+    match do |left|
+      expect(subtype_of?(expr(left), expr(right))).to be_truthy
+    end
+  end
+
+  specify do
+    expect('Bool').to be_subtype_of('Bool')
+  end
+
+  specify do
+    expect('Bool').to be_subtype_of('Top')
+  end
+
+  specify do
+    expect('Top').not_to be_subtype_of('Bool')
+  end
+
+  def expr(text)
+    Parser.parse(text)
+  end
+end
+
 RSpec.describe 'type_of' do
   specify do
     expect(type_of(expr 'true')).to eq(expr 'Bool')

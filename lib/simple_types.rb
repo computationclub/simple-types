@@ -1,6 +1,12 @@
 require 'term'
 require 'type'
 
+def subtype_of?(subtype, supertype)
+  return true if supertype == Type::Top # SA-TOP
+  return true if subtype == supertype # S-REFL
+  false
+end
+
 def type_of(term, context = {})
   case term
   when Term::True, Term::False
