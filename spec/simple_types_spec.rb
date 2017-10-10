@@ -33,6 +33,22 @@ RSpec.describe 'subtype_of?' do
     specify do
       expect('{x:Bool}').not_to be_subtype_of('{x:Bool, y:Bool}')
     end
+
+    specify do
+      expect('{x:Bool}').to be_subtype_of('{x:Top}')
+    end
+
+    specify do
+      expect('{x:Top}').not_to be_subtype_of('{x:Bool}')
+    end
+
+    specify do
+      expect('{x:{a:Bool, b:Bool}}').to be_subtype_of('{x:{a:Bool}}')
+    end
+
+    specify do
+      expect('{x:{a:Bool}}').not_to be_subtype_of('{x:{a:Bool, b:Bool}}')
+    end
   end
 
   def expr(text)

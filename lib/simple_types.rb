@@ -6,7 +6,7 @@ def subtype_of?(subtype, supertype)
   return true if subtype == supertype # S-REFL
   if subtype.is_a?(Type::Record) && supertype.is_a?(Type::Record)
     return supertype.members.all? do |field, type|
-      subtype.members.key?(field)
+      subtype.members.key?(field) && subtype_of?(subtype.members[field], type)
     end
   end
   false
