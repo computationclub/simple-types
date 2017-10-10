@@ -42,7 +42,7 @@ def type_of(term, context = {})
   when Term::Application
     left_type = type_of(term.left, context)
     raise TypeError, 'non-abstraction' unless left_type.is_a?(Type::Function)
-    raise TypeError, '💩 argument' unless left_type.from == type_of(term.right, context)
+    raise TypeError, '💩 argument' unless subtype_of?(type_of(term.right, context), left_type.from)
 
     left_type.to
   when Term::Record

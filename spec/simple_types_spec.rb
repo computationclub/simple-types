@@ -167,6 +167,14 @@ RSpec.describe 'type_of' do
     expect { type_of(expr '{foo=true, bar=λx:Bool. true}.baz') }.to raise_error(TypeError)
   end
 
+  specify do
+    expect(type_of(expr '(λr:{x:Bool}. r.x) {x=true, y=false}')).to eq(expr 'Bool')
+  end
+
+  specify do
+    expect { type_of(expr '(λr:{x:Bool, y:Bool}. r.x) {x=true}') }.to raise_error(TypeError)
+  end
+
   def expr(text)
     Parser.parse(text)
   end
