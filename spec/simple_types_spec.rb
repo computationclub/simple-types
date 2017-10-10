@@ -210,4 +210,10 @@ RSpec.describe 'join' do
       expect(join(expr('{x:Bool, y:Bool}'), expr('{x:{a:Bool}, y:Bool}'))).to eq(expr('{x:Top, y:Bool}'))
     end
   end
+
+  describe 'functions' do
+    specify do
+      expect(join(expr('Bool -> Bool'), expr('Bool -> {x:Bool}'))).to eq(expr('Bool -> Top'))
+    end
+  end
 end

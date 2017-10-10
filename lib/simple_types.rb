@@ -11,6 +11,9 @@ def join(a, b)
     end.to_h
     return Type::Record.new(members)
   end
+  if a.is_a?(Type::Function) && b.is_a?(Type::Function)
+    return Type::Function.new(a.from, join(a.to, b.to))
+  end
   Type::Top
 end
 
