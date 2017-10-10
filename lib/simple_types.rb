@@ -1,6 +1,12 @@
 require 'term'
 require 'type'
 
+def join(a, b)
+  return a if subtype_of?(b, a)
+  return b if subtype_of?(a, b)
+  Type::Top
+end
+
 def subtype_of?(subtype, supertype)
   return true if supertype == Type::Top # SA-TOP
   return true if subtype == supertype # S-REFL

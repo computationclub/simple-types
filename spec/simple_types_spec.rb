@@ -1,6 +1,10 @@
 require 'simple_types'
 require 'parser'
 
+def expr(text)
+  Parser.parse(text)
+end
+
 RSpec.describe 'subtype_of?' do
 
   RSpec::Matchers.define :be_subtype_of do |right|
@@ -75,10 +79,6 @@ RSpec.describe 'subtype_of?' do
     specify do
       expect('Bool -> Bool').not_to be_subtype_of('Top -> Bool')
     end
-  end
-
-  def expr(text)
-    Parser.parse(text)
   end
 end
 
@@ -175,11 +175,25 @@ RSpec.describe 'type_of' do
     expect { type_of(expr '(λr:{x:Bool, y:Bool}. r.x) {x=true}') }.to raise_error(TypeError)
   end
 
-  def expr(text)
-    Parser.parse(text)
-  end
-
   def empty_context
     {}
+  end
+end
+
+RSpec.describe 'join' do
+  specify do
+    expect(join(expr('Bool'), expr('Bool'))).to eq(expr('Bool'))
+  end
+
+  specify do
+    expect(join(expr('Bool'), expr('Top'))).to eq(expr('Top'))
+  end
+
+  specify do
+    expect(join(expr('Top'), expr('Bool'))).to eq(expr('Top'))
+  end
+
+  specify do
+    expect(join(expr('Bool'), expr('{x:Bool}'))).to eq(expr('Top'))
   end
 end
