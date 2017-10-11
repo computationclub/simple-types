@@ -27,6 +27,14 @@ module Type
   Record = Struct.new(:members) do
     include Term::Atom
 
+    def ==(other)
+      (
+        other.is_a?(Record) &&
+        members == other.members &&
+        members.keys == other.members.keys
+      )
+    end
+
     def inspect
       pairs = members.map { |k, t| "#{k}: #{t.inspect}" }
       "{#{pairs * ', '}}"

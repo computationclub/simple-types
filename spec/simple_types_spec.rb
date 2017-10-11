@@ -21,6 +21,20 @@ RSpec.describe 'subtype_of?' do
     expect('Top').not_to be_subtype_of('Bool')
   end
 
+  describe "SA-RCD" do
+    specify do
+      expect('{x:Bool, y:Bool}').to be_subtype_of('{y:Bool, x:Bool}')
+    end
+
+    specify do
+      expect('{x:Bool, y:Bool}').to be_subtype_of('{x:Bool}')
+    end
+
+    specify do
+      expect('{x:Bool}').not_to be_subtype_of('{x:Bool, y:Bool}')
+    end
+  end
+
   def expr(text)
     Parser.parse(text)
   end

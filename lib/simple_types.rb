@@ -4,6 +4,11 @@ require 'type'
 def subtype_of?(subtype, supertype)
   return true if supertype == Type::Top # SA-TOP
   return true if subtype == supertype # S-REFL
+  if subtype.is_a?(Type::Record) && supertype.is_a?(Type::Record)
+    return supertype.members.all? do |field, type|
+      subtype.members.key?(field)
+    end
+  end
   false
 end
 
