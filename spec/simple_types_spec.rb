@@ -225,3 +225,17 @@ RSpec.describe 'join' do
     end
   end
 end
+
+RSpec.describe 'meet' do
+  specify do
+    expect(meet(expr('Bool'), expr('Bool'))).to eq(expr('Bool'))
+  end
+
+  specify do
+    expect(meet(expr('Top'), expr('Bool'))).to eq(expr('Bool'))
+  end
+
+  specify do
+    expect { meet(expr('Bool'), expr('Bool -> Bool')) }.to raise_error TypeError
+  end
+end

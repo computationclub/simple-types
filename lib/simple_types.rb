@@ -17,6 +17,12 @@ def join(a, b)
   Type::Top
 end
 
+def meet(a, b)
+  return a if subtype_of?(a, b)
+  return b if subtype_of?(b, a)
+  raise TypeError, "No meet of #{a} and #{b}"
+end
+
 def subtype_of?(subtype, supertype)
   return true if supertype == Type::Top # SA-TOP
   return true if subtype == supertype # S-REFL
