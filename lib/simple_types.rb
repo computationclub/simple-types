@@ -4,6 +4,13 @@ require 'type'
 def join(a, b)
   return a if subtype_of?(b, a)
   return b if subtype_of?(a, b)
+  if a.is_a?(Type::Record) && b.is_a?(Type::Record)
+    join_keys = a.members.keys & b.members.keys
+    members = join_keys.map do |key|
+      [key, join(a.members[key], b.members[key])]
+    end.to_h
+    return Type::Record.new(members)
+  end
   Type::Top
 end
 

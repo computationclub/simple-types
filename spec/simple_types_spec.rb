@@ -196,4 +196,14 @@ RSpec.describe 'join' do
   specify do
     expect(join(expr('Bool'), expr('{x:Bool}'))).to eq(expr('Top'))
   end
+
+  describe 'records' do
+    specify do
+      expect(join(expr('{x:Bool, y:Bool}'), expr('{x:Bool, z:Bool}'))).to eq(expr('{x:Bool}'))
+    end
+
+    specify do
+      expect(join(expr('{x:Bool, y:Bool}'), expr('{x:{a:Bool}, z:Bool}'))).to eq(expr('{x:Top}'))
+    end
+  end
 end
