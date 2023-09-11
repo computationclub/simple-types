@@ -9,7 +9,12 @@ RSpec.describe 'subtype_of?' do
 
   RSpec::Matchers.define :be_subtype_of do |right|
     match do |left|
+      @left = left
       expect(subtype_of?(expr(left), expr(right))).to be_truthy
+    end
+
+    description do
+      "be the case that #{@left} <: #{right}"
     end
   end
 
